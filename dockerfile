@@ -16,4 +16,4 @@ COPY src/ .
 ENV FLASK_APP=run.py
 
 # command to run on container start
-CMD [ "flask", "run" ]
+# CMD [ "flask", "run" ]
