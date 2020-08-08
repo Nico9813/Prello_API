@@ -16,3 +16,8 @@ services:
             - "4000:4000"
         volumes:
             - .:/app
+
+    admin:    
+        image: adminer    
+        ports:      
+            - "8080:8080"
