@@ -4,14 +4,21 @@ services:
     mysql-development:
         image: mysql:8.0.17
         environment:
-            MYSQL_ROOT_PASSWORD: helloworld
+            MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: testapp
         ports:
-            - "3308:3306"
+            - "3306:3306"
             
     server:
         build: .
-        command: flask run --host 0.0.0.0
+        depends_on: 
+            - mysql-development
+        command: sh -c "/wait && flask run"
+        environment:
+            - WAIT_HOSTS=mysql-development:3306
+            - WAIT_HOSTS_TIMEOUT=300
+            - WAIT_SLEEP_INTERVAL=30
+            - WAIT_HOST_CONNECT_TIMEOUT=30
         ports:
             - "4000:4000"
         volumes:

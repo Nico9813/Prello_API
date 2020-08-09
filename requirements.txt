@@ -1,2 +1,6 @@
 FLASK
 PYTEST
+mysql-connector-python
+pymysql
+flask_sqlalchemy
+flask_marshmallow
