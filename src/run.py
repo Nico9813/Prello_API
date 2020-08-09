@@ -2,6 +2,7 @@ from flask import Flask
 import mysql.connector
 import time
 
+
 app = Flask(__name__)
 
 mydb = mysql.connector.connect(
