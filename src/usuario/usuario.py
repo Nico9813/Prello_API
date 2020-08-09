@@ -1,9 +1,8 @@
 class Usuario:
-    nombre
-    edad
-    tableros
+    nombre : str
+    edad : int
 
-    def __init__(self, nombre, edad):
+    def __init__(self, nombre : str, edad : int):
         self.nombre = nombre
         self.edad = edad
     
