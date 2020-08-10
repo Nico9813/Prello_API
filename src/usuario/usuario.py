@@ -1,5 +1,3 @@
-
-
 class Usuario:
     nombre : str
     edad : int
