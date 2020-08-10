@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "C:\\Users\\arrie\\AppData\\Local\\Programs\\Python\\Python38-32\\python.exe",
+    "python.pythonPath": "C:\\Users\\Principal\\AppData\\Local\\Programs\\Python\\Python38-32\\python.exe",
     "python.linting.pylintEnabled": true,
     "python.linting.flake8Enabled": false,
     "python.linting.enabled": true,

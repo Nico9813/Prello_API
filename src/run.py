@@ -12,6 +12,9 @@ mydb = mysql.connector.connect(
     port="3306",
     database="testapp"
 )
+@app.route('/')
+def hola():
+    return "Hola Mundo!"
 
 if __name__ == "__main__":
     app.run()
