@@ -1,4 +1,4 @@
-package usuario
+
 
 class Usuario:
     nombre : str
