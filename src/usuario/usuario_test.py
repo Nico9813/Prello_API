@@ -1,5 +1,5 @@
-def func(x):
-    return x + 1
+package usuario
 
-def test_answer():
-    assert func(3) == 4
+def test_crear_usuario:
+    usuario = Usuario()
+    assert usuario

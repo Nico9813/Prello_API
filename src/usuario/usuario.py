@@ -1,3 +1,5 @@
+package usuario
+
 class Usuario:
     nombre : str
     edad : int
