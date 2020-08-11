@@ -1,18 +1,23 @@
-from tablero import Tablero
+from main.run import db
+from tablero.tablero import Tablero
 
-class Usuario:
-    nombre : str
-    edad : int
-    tableros : list(Tablero)
+usuarioXtablero = db.Table('asignaciones',
+    db.Column('usuario_id',db.Integer, db.ForeignKey('usuario.id'), primary_key=True),
+    db.Column('tablero_id',db.Integer, db.ForeignKey('tablero.id'), primary_key=True)
+)
 
-    def __init__(self, nombre : str, edad : int):
-        self.nombre = nombre
-        self.edad = edad
-        self.tableros = []
+class Usuario(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(80), nullable=False)
+    edad = db.Column(db.Integer, nullable=False)
+    tableros = db.relationship('Tablero', secondary=usuarioXtablero, lazy='subquery')
+
+    #def __init__(self, nombre: str, edad: int):
+     #   self.nombre = nombre
+     #   self.edad = edad
     
     def __str__(self):
-        return "Nombre: " + self.nombre + ", Edad: " + self.edad + ", Tableros: " + len(self.tableros)
+        return "Nombre: " + self.nombre + ", Edad: " + self.edad
 
-    def agregarTablero(nombre : str):
-        self.tableros.append(Tablero(nombre))
-
+    def agregar_tablero(self, tablero : Tablero):
+        tableros.append(tablero)
