@@ -11,13 +11,10 @@ class Usuario(db.Model):
     nombre = db.Column(db.String(80), nullable=False)
     edad = db.Column(db.Integer, nullable=False)
     tableros = db.relationship('Tablero', secondary=usuarioXtablero, lazy='subquery')
-
-    #def __init__(self, nombre: str, edad: int):
-     #   self.nombre = nombre
-     #   self.edad = edad
+    roles = db.relationship('Rol', lazy=True)
     
     def __str__(self):
         return "Nombre: " + self.nombre + ", Edad: " + self.edad
 
     def agregar_tablero(self, tablero : Tablero):
-        tableros.append(tablero)
+        self.tableros.append(tablero)
