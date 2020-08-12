@@ -16,6 +16,7 @@ ma = Marshmallow(app)
 
 from usuario.usuario import Usuario
 from tablero.tablero import Tablero
+from tarea.tarea import Tarea
 
 db.create_all()
 
@@ -29,6 +30,10 @@ def index():
     usuario_prueba.edad = 17
     tablero_prueba = Tablero('tablerito')
     usuario_prueba.tableros = [tablero_prueba]
+    tarea_prueba = Tarea()
+    tarea_prueba.titulo = 'primera tarea'
+    tarea_prueba.descripcion = 'una muy muy larga descripcion'
+    tablero_prueba.tareas = [tarea_prueba]
     db.session.add(usuario_prueba)
     db.session.commit()
     return jsonify({'message': 'Welcome to my API'})
