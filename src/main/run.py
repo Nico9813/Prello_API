@@ -26,6 +26,7 @@ db.create_all()
 app.register_blueprint(usuario_router, url_prefix='/users')
 app.register_blueprint(tablero_router, url_prefix='/tableros')
 
+
 @app.route('/', methods=['GET'])
 def index():
     estado_prueba = Estado()
@@ -60,6 +61,7 @@ def index():
     db.session.add(usuario_prueba)
     db.session.commit()
     return jsonify({'message': 'Welcome to my API'})
+
 
 if __name__ == "__main__":
     app.run()
@@ -123,6 +125,3 @@ if __name__ == "__main__":
 # - GET     tableros/<id_tablero>/workflows/<id>                        --> OBTENER WORKFLOW ID
 # - PUT     tableros/<id_tablero>/workflows/<id>                        --> MODIFICAR WORKFLOW ID
 # - DELETE  tableros/<id_tablero>/workflows/<id>                        --> BORRAR WORKFLOW ID
-
-
-

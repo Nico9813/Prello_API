@@ -1,0 +1,3 @@
+
+class Interesado:
+    pass
