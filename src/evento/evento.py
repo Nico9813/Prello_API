@@ -1,2 +1,18 @@
-class Evento:
+from enum import Enum
+
+class Evento(Enum):
     pass
+
+class Evento_tablero(Evento):
+    CREACION_TARJETA = "CREACION DE TARJETAS"
+    BORRACION_TARJETA = "BORRADO DE TARJETAS"
+    MOVICION_TARJETA = "MOVIMIENTOS DE TARJETAS"
+    AGREGACION_USUARIO = "AGREGADO DE USUARIOS"
+    
+class Evento_estado(Evento):
+    INGRESO_TARJETA = "LLEGADA DE TARJETAS"
+    EGRESO_TARJETA = "SALIDA DE TARJETAS"
+    
+class Evento_tarea(Evento):
+    CAMBIO_DE_ESTADO = "CAMBIOS DE ESTADO"
+    BORRADO_TARJETA = "BORRADO DE TARJETA"

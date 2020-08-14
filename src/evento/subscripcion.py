@@ -12,3 +12,6 @@ class Subscripcion:
         self.interesado = interesado
         self.evento = evento
         self.accion = accion
+
+    def ejecutar_accion(self):
+        self.accion.ejecutar()
