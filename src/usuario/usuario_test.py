@@ -1,2 +1,5 @@
+from .usuario import Usuario
+
 def test_crear_usuario():
-    assert 1 + 1 == 2
+    user = Usuario("asda")
+    assert user.nombre == "asda"
