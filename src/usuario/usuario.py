@@ -6,6 +6,7 @@ from evento.subscripcion import Subscripcion
 from main.run import db
 from tablero.tablero import Tablero
 from .rol import Rol
+from tarea.estado import Estado
 
 usuarioXtablero = db.Table('asignaciones',
     db.Column('usuario_id',db.Integer, db.ForeignKey('usuarios.id'), primary_key=True),
@@ -30,3 +31,6 @@ class Usuario(db.Model, Interesado):
 
     def subscribirse(self, evento: Evento, observable: Observable, accion: Accion):
         observable.agregar_subscripcion(Subscripcion(self, evento, accion))
+
+    def crear_tarea_en_tablero(self, tablero:Tablero, estado:Estado, titulo:str, descripcion:str):
+        pass
