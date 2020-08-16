@@ -1,7 +1,14 @@
+from main.run import db
 from evento.subscripcion import Subscripcion
+from sqlalchemy.ext.declarative import declared_attr
 
-class Observable:
-    subscripciones: list
+class Observable(db.Model):
+    __abstract__ = True
+    id = db.Column(db.Integer, primary_key=True)
+
+    @declared_attr
+    def subscripciones(cls):
+        return db.relationship('Subscripcion', lazy=True)
 
     def agregar_subscripcion(self, subscripcion: Subscripcion):
         self.subscripciones.append(subscripcion)

@@ -1,8 +1,10 @@
 from main.run import db
 from .estado import Estado
+from evento.subscripcion import Subscripcion
 from evento.observable import Observable
+from evento.evento import Evento
 
-class Tarea(db.Model, Observable):
+class Tarea(Observable):
     __tablename__ = 'tareas'
     id = db.Column(db.Integer, primary_key=True)
     tablero_id = db.Column(db.Integer, db.ForeignKey('tableros.id'), nullable=False)
@@ -15,6 +17,7 @@ class Tarea(db.Model, Observable):
         self.estado = estado
         self.titulo = titulo
         self.descripcion = descripcion
+        self.subscripciones = []
 
     def obtener_eventos_posibles(self) -> list:
-        return list(Evento_tarea)
+        return list(Evento)

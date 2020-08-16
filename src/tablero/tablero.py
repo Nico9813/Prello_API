@@ -3,9 +3,9 @@ from evento.subscripcion import Subscripcion
 from main.run import db
 from tarea.tarea import Tarea
 from transicion.transicion import Transicion
-from evento.evento import Evento_tablero, Evento
+from evento.evento import Evento
 
-class Tablero(db.Model, Observable):
+class Tablero(Observable):
     __tablename__ = 'tableros'
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(80), nullable=True)
@@ -19,5 +19,8 @@ class Tablero(db.Model, Observable):
     def __str__(self):
         return "Nombre tablero: " + self.nombre
 
+    def agregar_tarea(self, tarea : Tarea):
+        self.tareas.append(tarea)
+
     def obtener_eventos_posibles(self) -> list:
-        return list(Evento_tablero)
+        return list(Evento)

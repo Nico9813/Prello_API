@@ -1,15 +1,18 @@
+from main.run import db
 from evento.accion import Accion
 from evento.evento import Evento
-from evento.interesado import Interesado
+
+class Subscripcion(db.Model):
+    __tablename__ = 'subscripciones'
+    id = db.Column(db.Integer, primary_key=True)
+    evento: Evento = db.Column(db.Enum(Evento))
+    accion: Accion = db.relationship('Accion', uselist=False, lazy=True)
+    estado_id = db.Column(db.Integer, db.ForeignKey('estados.id'))
+    tablero_id = db.Column(db.Integer, db.ForeignKey('tableros.id'))
+    tarea_id = db.Column(db.Integer, db.ForeignKey('tareas.id'))
 
 
-class Subscripcion:
-    interesado: Interesado
-    evento: Evento
-    accion: Accion
-
-    def __init__(self, interesado: Interesado, evento: Evento, accion: Accion):
-        self.interesado = interesado
+    def __init__(self, evento: Evento, accion: Accion):
         self.evento = evento
         self.accion = accion
 

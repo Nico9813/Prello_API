@@ -14,14 +14,17 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
-def create_app():
-    from usuario.rol import Rol
-    from tarea.estado import Estado
-    from tarea.tarea import Tarea
-    from tablero.tablero import Tablero
-    from usuario.usuario import Usuario
-    from tablero.transicion import Transicion
-    db.create_all()
+from usuario.rol import Rol
+from tarea.estado import Estado
+from tarea.tarea import Tarea
+from tablero.tablero import Tablero
+from usuario.usuario import Usuario
+from transicion.transicion import Transicion
+from evento.observable import Observable
+from evento.evento import Evento
+from evento.accion import Accion_mock
+from evento.subscripcion import Subscripcion
+db.create_all()
 
 app.register_blueprint(usuario_router, url_prefix='/users')
 app.register_blueprint(tablero_router, url_prefix='/tableros')
@@ -29,11 +32,33 @@ app.register_blueprint(tablero_router, url_prefix='/tableros')
 
 @app.route('/', methods=['GET'])
 def index():
+    User : Usuario = Usuario('Rodrigo')
+    QA : Rol = Rol('QA')
+
+    TO_DO : Estado = Estado('TO_DO')
+    DOING : Estado = Estado('DOING')
+    
+    Accion_tablero : Accion_mock = Accion_mock()
+    Accion_tarea : Accion_mock = Accion_mock()
+    Accion_estado : Accion_mock = Accion_mock()
+
+    Primer_tarea : Tarea = Tarea(TO_DO, 'Tituloo', 'Descripcion larga')
+
+    Proyecto : Tablero = Tablero('Proyecto')
+    Proyecto.agregar_tarea(Primer_tarea)
+
+    User.agregar_tablero(Proyecto)
+    User.subscribirse(Evento.CREACION_TARJETA, Proyecto, Accion_tablero)
+    User.subscribirse(Evento.CAMBIO_DE_ESTADO, Primer_tarea, Accion_tarea)
+    User.subscribirse(Evento.INGRESO_TARJETA, TO_DO, Accion_estado)
+
+    db.session.add(User)
+    db.session.commit()
+
     return jsonify({'message': 'Welcome to my APIIIIII'})
 
 
 if __name__ == "__main__":
-    create_app()
     app.run()
 
 # CASOS DE USO

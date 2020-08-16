@@ -30,7 +30,7 @@ class Usuario(db.Model, Interesado):
         self.tableros.append(tablero)
 
     def subscribirse(self, evento: Evento, observable: Observable, accion: Accion):
-        observable.agregar_subscripcion(Subscripcion(self, evento, accion))
+        observable.agregar_subscripcion(Subscripcion(evento, accion))
 
     def crear_tarea_en_tablero(self, tablero:Tablero, estado:Estado, titulo:str, descripcion:str):
         pass
