@@ -14,17 +14,18 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
-from usuario.rol import Rol
-from tarea.estado import Estado
-from tarea.tarea import Tarea
-from tablero.tablero import Tablero
-from usuario.usuario import Usuario
-from tablero.transicion_realizada import Transicion_realizada
-from evento.observable import Observable
-from evento.evento import Evento
-from evento.accion import Accion_mock
-from evento.subscripcion import Subscripcion
-db.create_all()
+def create_app():
+    from usuario.rol import Rol
+    from tarea.estado import Estado
+    from tarea.tarea import Tarea
+    from tablero.tablero import Tablero
+    from usuario.usuario import Usuario
+    from tablero.transicion_realizada import Transicion_realizada
+    from evento.observable import Observable
+    from evento.evento import Evento
+    from evento.accion import Accion_mock
+    from evento.subscripcion import Subscripcion
+    db.create_all()
 
 app.register_blueprint(usuario_router, url_prefix='/users')
 app.register_blueprint(tablero_router, url_prefix='/tableros')
@@ -60,6 +61,7 @@ def index():
 
 if __name__ == "__main__":
     app.run()
+    create_app()
 
 # CASOS DE USO
 

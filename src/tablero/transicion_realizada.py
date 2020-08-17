@@ -16,6 +16,5 @@ class Transicion_realizada(db.Model):
     estado_inicial = db.relationship('Estado', foreign_keys=[estado_inicial_id],lazy=True)
     estado_final = db.relationship('Estado', foreign_keys=[estado_final_id] ,lazy=True)
 
-    def __init__(self, tarea: Tarea, estado_final: Estado, workflow: Workflow):
-        pass
-        #tirar error si los estados no son factibles
+    #def __init__(self, tarea: Tarea, estado_final: Estado, workflow: Workflow):
+        

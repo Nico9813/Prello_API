@@ -4,6 +4,7 @@ from main.run import db
 from tarea.tarea import Tarea
 from .transicion_realizada import Transicion_realizada
 from evento.evento import Evento
+from tarea.estado import Estado
 
 class Tablero(Observable):
     __tablename__ = 'tableros'
@@ -24,3 +25,13 @@ class Tablero(Observable):
 
     def obtener_eventos_posibles(self) -> list:
         return list(Evento)
+
+    def ejecutar_transicion(self, tarea: Tarea, estado_final: Estado):
+        acciones_a_ejecutar = self.workflow.obtener_funciones_para_transicion(tarea.estado, estado_final)
+        if length(acciones_a_ejecutar) == 0:
+            raise
+        transicion_a_realizar = Transicion_realizada(tarea, estado_final, acciones_a_ejecutar)
+        for accion in acciones_a_ejecutar:
+            accion.ejecutar()
+
+        
