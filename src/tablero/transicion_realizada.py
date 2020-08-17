@@ -1,9 +1,10 @@
 from main.run import db
 from tarea.estado import Estado
 from tarea.tarea import Tarea
+from workflow.workflow import Workflow
 
-class Transicion(db.Model):
-    __tablename__ = 'transiciones'
+class Transicion_realizada(db.Model):
+    __tablename__ = 'transiciones_realizadas'
     id = db.Column(db.Integer, primary_key=True)
     
     tablero_id = db.Column(db.Integer, db.ForeignKey('tableros.id'), nullable=False)
@@ -14,3 +15,7 @@ class Transicion(db.Model):
     tarea = db.relationship('Tarea', lazy=True)
     estado_inicial = db.relationship('Estado', foreign_keys=[estado_inicial_id],lazy=True)
     estado_final = db.relationship('Estado', foreign_keys=[estado_final_id] ,lazy=True)
+
+    def __init__(self, tarea: Tarea, estado_final: Estado, workflow: Workflow):
+        pass
+        #tirar error si los estados no son factibles

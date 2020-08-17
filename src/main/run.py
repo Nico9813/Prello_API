@@ -19,7 +19,7 @@ from tarea.estado import Estado
 from tarea.tarea import Tarea
 from tablero.tablero import Tablero
 from usuario.usuario import Usuario
-from transicion.transicion import Transicion
+from tablero.transicion_realizada import Transicion_realizada
 from evento.observable import Observable
 from evento.evento import Evento
 from evento.accion import Accion_mock
