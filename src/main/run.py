@@ -25,6 +25,8 @@ def create_app():
     from evento.evento import Evento
     from evento.accion import Accion_mock
     from evento.subscripcion import Subscripcion
+    from workflow.workflow import Workflow
+    from workflow.transicion_posible import Transicion_posible
     db.create_all()
 
 app.register_blueprint(usuario_router, url_prefix='/users')
@@ -42,17 +44,20 @@ def index():
     from evento.evento import Evento
     from evento.accion import Accion_mock
     from evento.subscripcion import Subscripcion
+    from workflow.workflow import Workflow
+    from workflow.transicion_posible import Transicion_posible
+
     User : Usuario = Usuario('Rodrigo')
     QA : Rol = Rol('QA')
 
-    TO_DO : Estado = Estado('TO_DO')
+    TODO : Estado = Estado('TODO')
     DOING : Estado = Estado('DOING')
     
     Accion_tablero : Accion_mock = Accion_mock()
     Accion_tarea : Accion_mock = Accion_mock()
     Accion_estado : Accion_mock = Accion_mock()
 
-    Primer_tarea : Tarea = Tarea(TO_DO, 'Tituloo', 'Descripcion larga')
+    Primer_tarea : Tarea = Tarea(TODO, 'Tituloo', 'Descripcion larga')
 
     Proyecto : Tablero = Tablero('Proyecto')
     Proyecto.agregar_tarea(Primer_tarea)
@@ -60,17 +65,25 @@ def index():
     User.agregar_tablero(Proyecto)
     User.subscribirse(Evento.CREACION_TARJETA, Proyecto, Accion_tablero)
     User.subscribirse(Evento.CAMBIO_DE_ESTADO, Primer_tarea, Accion_tarea)
-    User.subscribirse(Evento.INGRESO_TARJETA, TO_DO, Accion_estado)
+    User.subscribirse(Evento.INGRESO_TARJETA, TODO, Accion_estado)
+
+
+    accion_transicion : Accion_mock = Accion_mock()
+
+    workflow: Workflow = Workflow()
+    Proyecto.workflow = workflow
+
+    workflow.agregar_accion_entre_estados(TODO, DOING, accion_transicion)
+    Proyecto.ejecutar_transicion(Primer_tarea, DOING)
 
     db.session.add(User)
     db.session.commit()
-
     return jsonify({'message': 'Welcome to my APIIIIII'})
 
 
-if __name__ == "__main__":
-    create_app()
-    app.run()
+#if __name__ == "__main__":
+create_app()
+app.run()
 
 
 # CASOS DE USO

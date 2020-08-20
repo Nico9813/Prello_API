@@ -21,3 +21,6 @@ class Tarea(Observable):
 
     def obtener_eventos_posibles(self) -> list:
         return list(Evento)
+
+    def actualizar_estado(self, estado_nuevo : Estado):
+        self.estado = estado_nuevo

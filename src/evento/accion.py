@@ -4,7 +4,8 @@ class Accion(db.Model):
 
     __tablename__ = 'acciones'
     id = db.Column(db.Integer, primary_key=True)
-    subscripcion_id = db.Column(db.Integer, db.ForeignKey('subscripciones.id'), nullable=False)
+    transicion_id = db.Column(db.Integer, db.ForeignKey('transiciones_posibles.id'), nullable=True)
+    subscripcion_id = db.Column(db.Integer, db.ForeignKey('subscripciones.id'), nullable=True)
     type = db.Column(db.String(50))
 
     def ejecutar(self):
