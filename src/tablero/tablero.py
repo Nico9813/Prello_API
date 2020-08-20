@@ -5,10 +5,15 @@ from tarea.tarea import Tarea
 from .transicion_realizada import Transicion_realizada
 from evento.evento import Evento
 from tarea.estado import Estado
+from workflow.workflow import Workflow
+from workflow.transicion_posible import Transicion_posible
 
 class Tablero(Observable):
     __tablename__ = 'tableros'
     id = db.Column(db.Integer, primary_key=True)
+    workflow_id = db.Column(db.Integer, db.ForeignKey('workflows.id'), nullable=False)
+
+    workflow: Workflow = db.relationship('Workflow', lazy=True, foreign_keys=[workflow_id])
     nombre = db.Column(db.String(80), nullable=True)
     tareas = db.relationship('Tarea', lazy=True)
     transiciones = db.relationship('Transicion_realizada', lazy=True)
@@ -16,6 +21,8 @@ class Tablero(Observable):
     def __init__(self, nombre: str):
         self.nombre = nombre
         self.subscripciones = []
+        self.tareas = []
+        self.transiciones = []
     
     def __str__(self):
         return "Nombre tablero: " + self.nombre
@@ -27,11 +34,12 @@ class Tablero(Observable):
         return list(Evento)
 
     def ejecutar_transicion(self, tarea: Tarea, estado_final: Estado):
-        acciones_a_ejecutar = self.workflow.obtener_funciones_para_transicion(tarea.estado, estado_final)
-        if length(acciones_a_ejecutar) == 0:
-            raise
-        transicion_a_realizar = Transicion_realizada(tarea, estado_final, acciones_a_ejecutar)
-        for accion in acciones_a_ejecutar:
-            accion.ejecutar()
+        transicion_historico : Transicion_realizada = Transicion_realizada(tarea, estado_final)
+        
+        acciones_ejecutadas = self.workflow.ejecutar_transicion(tarea, estado_final)
+
+        self.transiciones.append(transicion_historico)
+
+        
 
         

@@ -16,5 +16,7 @@ class Transicion_realizada(db.Model):
     estado_inicial = db.relationship('Estado', foreign_keys=[estado_inicial_id],lazy=True)
     estado_final = db.relationship('Estado', foreign_keys=[estado_final_id] ,lazy=True)
 
-    #def __init__(self, tarea: Tarea, estado_final: Estado, workflow: Workflow):
-        
+    def __init__(self, tarea: Tarea, estado_final: Estado):
+        self.tarea = tarea
+        self.estado_inicial = tarea.estado
+        self.estado_final = estado_final
