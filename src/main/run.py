@@ -6,6 +6,13 @@ import mysql.connector
 from usuario.usuario_api import usuario_router
 from tablero.tablero_api import tablero_router
 
+from .autentificacion import AuthError, requires_auth
+from flask_cors import cross_origin
+
+AUTH0_DOMAIN = 'dev-jx8fysvq.us.auth0.com'
+API_AUDIENCE = 'https://api-prello/v1'
+ALGORITHMS = ["RS256"]
+
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@mysql-development:3306/testapp'
@@ -13,6 +20,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
+
+@app.errorhandler(AuthError)
+def handle_auth_error(ex):
+    response = jsonify(ex.error)
+    response.status_code = ex.status_code
+    return response
 
 def create_app():
     from usuario.rol import Rol
@@ -31,6 +44,13 @@ def create_app():
 
 app.register_blueprint(usuario_router, url_prefix='/users')
 app.register_blueprint(tablero_router, url_prefix='/tableros')
+
+
+@app.route('/private', methods=['GET'])
+@cross_origin(headers=["Content-Type", "Authorization"])
+@requires_auth
+def private():
+    return jsonify({'message': 'Welcome to my APIIIIII PRIVATE'})
 
 @app.route('/', methods=['GET'])
 def index():
@@ -84,7 +104,6 @@ def index():
 #if __name__ == "__main__":
 create_app()
 app.run()
-
 
 # CASOS DE USO
 

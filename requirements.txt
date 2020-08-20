@@ -1,4 +1,4 @@
-FLASK
+flask
 PYTEST
 mysql-connector-python
 pymysql
@@ -6,3 +6,7 @@ cryptography
 flask_sqlalchemy
 marshmallow-sqlalchemy
 flask_marshmallow
+python-dotenv
+python-jose
+flask-cors
+six
