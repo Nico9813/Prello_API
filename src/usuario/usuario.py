@@ -21,8 +21,8 @@ class Usuario(db.Model, Interesado):
     roles = db.relationship('Rol', lazy=True)
 
     def __str__(self):
-        return "Nombre: " + self.nombre + ", Edad: " + self.edad
-
+        return "Nombre: " + self.nombre
+        
     def __init__(self, nombre: str):
         self.nombre = nombre
 

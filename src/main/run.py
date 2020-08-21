@@ -3,15 +3,15 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import mysql.connector
 
-from usuario.usuario_api import usuario_router
-from tablero.tablero_api import tablero_router
-
 from .autentificacion import AuthError, requires_auth
 from flask_cors import cross_origin
 
 AUTH0_DOMAIN = 'dev-jx8fysvq.us.auth0.com'
 API_AUDIENCE = 'https://api-prello/v1'
 ALGORITHMS = ["RS256"]
+
+# Para obtener el token de acceso POST https://dev-jx8fysvq.us.auth0.com/oauth/token HEADERS { "content-type": "application/json"}
+# Para acceder a una ruta privada HEADERS { "content-type": "application/json", "Authorization": "Bearer TOKEN_ACCESO"}
 
 app = Flask(__name__)
 
@@ -41,10 +41,6 @@ def create_app():
     from workflow.workflow import Workflow
     from workflow.transicion_posible import Transicion_posible
     db.create_all()
-
-app.register_blueprint(usuario_router, url_prefix='/users')
-app.register_blueprint(tablero_router, url_prefix='/tableros')
-
 
 @app.route('/private', methods=['GET'])
 @cross_origin(headers=["Content-Type", "Authorization"])
@@ -98,12 +94,18 @@ def index():
 
     db.session.add(User)
     db.session.commit()
-    return jsonify({'message': 'Welcome to my APIIIIII'})
+    return jsonify({'message': __name__})
 
 
-#if __name__ == "__main__":
-create_app()
-app.run()
+if __name__ == "main.run":
+    from usuario.usuario_api import usuario_router
+    from tablero.tablero_api import tablero_router
+
+    app.register_blueprint(usuario_router, url_prefix='/users')
+    app.register_blueprint(tablero_router, url_prefix='/tableros')
+
+    create_app()
+    app.run()
 
 # CASOS DE USO
 
@@ -124,11 +126,11 @@ app.run()
 # END POINTS API
 
 # USUARIO
-# - POST    perfil/                                                      --> NUEVO USUARIO
-# - GET     perfil/<id>                                                  --> OBTENER USUARIO
-# - GET     perfil                                                       --> OBTENER USUARIO PROPIO
-# - PUT     perfil                                                       --> MODIFICAR USUARIO PROPIO
-# - DELETE  perfil                                                       --> BORRAR USUARIO PROPIO
+# - POST    users/                                                      --> NUEVO USUARIO
+# - GET     users/                                                      --> OBTENER USUARIO
+# - GET     users                                                       --> OBTENER USUARIO PROPIO
+# - PUT     users                                                       --> MODIFICAR USUARIO PROPIO
+# - DELETE  users                                                       --> BORRAR USUARIO PROPIO
 
 # TABLEROS USUARIO
 # - GET     tableros                                                    --> OBTENER TODOS LOS TABLEROS DE USUARIO ID

@@ -1,12 +1,15 @@
 from six.moves.urllib.request import urlopen
 from functools import wraps
-from flask import request, _request_ctx_stack
+from flask import request, _request_ctx_stack, jsonify
 from jose import jwt
 import json
 
 AUTH0_DOMAIN = 'dev-jx8fysvq.us.auth0.com'
 API_AUDIENCE = 'https://api-prello/v1'
 ALGORITHMS = ["RS256"]
+
+def get_id_usuario_actual():
+    return 1
 
 class AuthError(Exception):
     def __init__(self, error, status_code):
