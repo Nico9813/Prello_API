@@ -12,7 +12,7 @@ from workflow.transicion_posible import Transicion_posible
 class Tablero(Observable):
     __tablename__ = 'tableros'
     id = db.Column(db.Integer, primary_key=True)
-    workflow_id = db.Column(db.Integer, db.ForeignKey('workflows.id'), nullable=False)
+    workflow_id = db.Column(db.Integer, db.ForeignKey('workflows.id'), nullable=True)
 
     workflow: Workflow = db.relationship('Workflow', lazy=True, foreign_keys=[workflow_id])
     nombre = db.Column(db.String(80), nullable=True)

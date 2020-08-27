@@ -24,7 +24,6 @@ class Accion_mock(Accion):
 
     def ejecutar(self):
         self.contador += 1
-        print("sumo 1")
 
         __mapper_args__ = {
             'polymorphic_identity': 'Accion_mock'
