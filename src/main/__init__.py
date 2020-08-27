@@ -3,6 +3,7 @@ from flask_restful import Api
 from .db import db
 from usuario.usuario_api import usuario_router
 from tablero.tablero_api import tablero_router
+from tarea.tarea_api import tarea_router
 from .autentificacion import AuthError
 from .ext import ma, migrate
 
@@ -24,6 +25,7 @@ def create_app(settings_module):
     # Registra los blueprints
     app.register_blueprint(usuario_router)
     app.register_blueprint(tablero_router)
+    app.register_blueprint(tarea_router)
 
     # Registra manejadores de errores personalizados
     register_error_handlers(app)
