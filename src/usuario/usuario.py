@@ -1,9 +1,10 @@
+from main.db import db, BaseModel
+
 from evento.accion import Accion
 from evento.evento import Evento
 from evento.interesado import Interesado
 from evento.observable import Observable
 from evento.subscripcion import Subscripcion
-from main.run import db
 from tablero.tablero import Tablero
 from .rol import Rol
 from tarea.estado import Estado
@@ -13,7 +14,7 @@ usuarioXtablero = db.Table('asignaciones',
     db.Column('tablero_id',db.Integer, db.ForeignKey('tableros.id'), primary_key=True)
 )
 
-class Usuario(db.Model, Interesado):
+class Usuario(db.Model, BaseModel, Interesado):
     __tablename__ = 'usuarios'
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(80), nullable=False)

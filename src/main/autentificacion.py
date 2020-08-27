@@ -3,10 +3,10 @@ from functools import wraps
 from flask import request, _request_ctx_stack, jsonify
 from jose import jwt
 import json
+from .config import AUTH0_DOMAIN, API_AUDIENCE, ALGORITHMS
 
-AUTH0_DOMAIN = 'dev-jx8fysvq.us.auth0.com'
-API_AUDIENCE = 'https://api-prello/v1'
-ALGORITHMS = ["RS256"]
+# Para obtener el token de acceso POST https://dev-jx8fysvq.us.auth0.com/oauth/token HEADERS { "content-type": "application/json"}
+# Para acceder a una ruta privada HEADERS { "content-type": "application/json", "Authorization": "Bearer TOKEN_ACCESO"}
 
 def get_id_usuario_actual():
     return 1

@@ -1,9 +1,10 @@
-from main.run import db
+from main.db import db, BaseModel
+
 from tarea.estado import Estado
 from tarea.tarea import Tarea
 from workflow.workflow import Workflow
 
-class Transicion_realizada(db.Model):
+class Transicion_realizada(db.Model, BaseModel):
     __tablename__ = 'transiciones_realizadas'
     id = db.Column(db.Integer, primary_key=True)
     

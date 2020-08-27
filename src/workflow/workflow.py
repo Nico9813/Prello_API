@@ -1,12 +1,13 @@
+from main.db import db, BaseModel
+
 from .transicion_posible import Transicion_posible
-from main.run import db
 from tarea.estado import Estado
 from evento.accion import Accion
 from pommons.list import find
 from tarea.tarea import Tarea
 import functools
 
-class Workflow(db.Model):
+class Workflow(db.Model, BaseModel):
     __tablename__ = 'workflows'
     transiciones_posibles: list = db.relationship('Transicion_posible', lazy = True)
 

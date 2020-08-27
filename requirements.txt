@@ -5,8 +5,11 @@ pymysql
 cryptography
 flask_sqlalchemy
 marshmallow-sqlalchemy
+marshmallow
 flask_marshmallow
+flask_migrate
 python-dotenv
+flask_restful 
 python-jose
 flask-cors
 six

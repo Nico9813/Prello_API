@@ -20,6 +20,7 @@ services:
             - WAIT_HOSTS_TIMEOUT=300
             - WAIT_SLEEP_INTERVAL=5
             - WAIT_HOST_CONNECT_TIMEOUT=30
+            - APP_SETTINGS_MODULE=main.config
         ports:
             - "5000:5000"
         volumes:

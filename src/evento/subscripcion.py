@@ -1,8 +1,8 @@
-from main.run import db
+from main.db import db, BaseModel
 from evento.accion import Accion
 from evento.evento import Evento
 
-class Subscripcion(db.Model):
+class Subscripcion(db.Model, BaseModel):
     __tablename__ = 'subscripciones'
     id = db.Column(db.Integer, primary_key=True)
     evento: Evento = db.Column(db.Enum(Evento))

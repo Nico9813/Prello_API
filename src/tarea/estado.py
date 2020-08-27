@@ -1,4 +1,5 @@
-from main.run import db
+from main.db import db
+
 from evento.evento import Evento
 from evento.observable import Observable
 from evento.subscripcion import Subscripcion

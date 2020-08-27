@@ -1,6 +1,6 @@
-from main.run import db
+from main.db import db, BaseModel
 
-class Accion(db.Model):
+class Accion(db.Model, BaseModel):
 
     __tablename__ = 'acciones'
     id = db.Column(db.Integer, primary_key=True)

@@ -1,8 +1,9 @@
+from main.db import db, BaseModel
+
 from tarea.estado import Estado
-from main.run import db
 from evento.accion import Accion
 
-class Transicion_posible(db.Model):
+class Transicion_posible(db.Model, BaseModel):
     __tablename__ = 'transiciones_posibles'
     id = db.Column(db.Integer, primary_key=True)
 

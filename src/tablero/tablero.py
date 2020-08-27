@@ -1,6 +1,7 @@
+from main.db import db
+
 from evento.observable import Observable
 from evento.subscripcion import Subscripcion
-from main.run import db
 from tarea.tarea import Tarea
 from .transicion_realizada import Transicion_realizada
 from evento.evento import Evento

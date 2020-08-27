@@ -1,8 +1,8 @@
-from main.run import db
+from main.db import db, BaseModel
 from evento.subscripcion import Subscripcion
 from sqlalchemy.ext.declarative import declared_attr
 
-class Observable(db.Model):
+class Observable(db.Model, BaseModel):
     __abstract__ = True
     id = db.Column(db.Integer, primary_key=True)
 
