@@ -4,17 +4,13 @@ from flask import request, _request_ctx_stack, jsonify
 from jose import jwt
 import json
 from .config import AUTH0_DOMAIN, API_AUDIENCE, ALGORITHMS
+from .excepciones import AuthError
 
 # Para obtener el token de acceso POST https://dev-jx8fysvq.us.auth0.com/oauth/token HEADERS { "content-type": "application/json"}
 # Para acceder a una ruta privada HEADERS { "content-type": "application/json", "Authorization": "Bearer TOKEN_ACCESO"}
 
 def get_id_usuario_actual():
     return 1
-
-class AuthError(Exception):
-    def __init__(self, error, status_code):
-        self.error = error
-        self.status_code = status_code
 
 def get_token_auth_header():
     auth = request.headers.get("Authorization", None)

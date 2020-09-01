@@ -37,7 +37,7 @@ class UsuarioPrueba(Resource):
         Accion_tarea: Accion_mock = Accion_mock()
         Accion_estado: Accion_mock = Accion_mock()
 
-        Primer_tarea: Tarea = Tarea(TODO, 'Tituloo', 'Descripcion larga')
+        Primer_tarea: Tarea = Tarea('Tituloo', 'Descripcion larga', estado=TODO)
 
         Proyecto: Tablero = Tablero('Proyecto')
         SegundoProyecto: Tablero = Tablero('Segundo Proyecto')

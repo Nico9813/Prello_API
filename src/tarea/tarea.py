@@ -14,7 +14,7 @@ class Tarea(Observable):
     titulo = db.Column(db.String(50))
     descripcion = db.Column(db.String(150))
     
-    def __init__(self, estado: Estado, titulo: str, descripcion: str):
+    def __init__(self, titulo: str, descripcion: str, estado: Estado = None):
         self.estado = estado
         self.titulo = titulo
         self.descripcion = descripcion

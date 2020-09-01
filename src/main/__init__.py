@@ -4,8 +4,8 @@ from .db import db
 from usuario.usuario_api import usuario_router
 from tablero.tablero_api import tablero_router
 from tarea.tarea_api import tarea_router
-from .autentificacion import AuthError
 from .ext import ma, migrate
+from .excepciones import ResourceNotFoundError, PermissionError, AuthError
 
 def create_app(settings_module):
     app = Flask(__name__)
@@ -36,6 +36,18 @@ def register_error_handlers(app):
 
     @app.errorhandler(AuthError)
     def handle_auth_error(ex):
+        response = jsonify(ex.error)
+        response.status_code = ex.status_code
+        return response
+
+    @app.errorhandler(ResourceNotFoundError)
+    def handle_resource_not_found(ex):
+        response = jsonify(ex.error)
+        response.status_code = ex.status_code
+        return response
+
+    @app.errorhandler(PermissionError)
+    def handle_permissionError(ex):
         response = jsonify(ex.error)
         response.status_code = ex.status_code
         return response
