@@ -8,6 +8,7 @@ class Estado(Observable):
     __tablename__ = 'estados'
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(80), nullable=False)
+    tablero_id = db.Column(db.Integer, db.ForeignKey('tableros.id'), nullable=False)
 
     def __init__(self, nombre : str):
         self.nombre = nombre

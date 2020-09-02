@@ -18,15 +18,20 @@ class Tablero(Observable):
     nombre = db.Column(db.String(80), nullable=True)
     tareas = db.relationship('Tarea', lazy=True)
     transiciones = db.relationship('Transicion_realizada', lazy=True)
+    estados = db.relationship('Estado', lazy=True)
 
     def __init__(self, nombre: str):
         self.nombre = nombre
         self.subscripciones = []
         self.tareas = []
         self.transiciones = []
+        self.estados = []
     
     def __str__(self):
         return "Nombre tablero: " + self.nombre
+
+    def agregar_estado(self, estado : Estado):
+        self.estados.append(estado)
 
     def agregar_tarea(self, tarea : Tarea):
         self.tareas.append(tarea)

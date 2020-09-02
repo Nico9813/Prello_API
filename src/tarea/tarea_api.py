@@ -18,6 +18,16 @@ tarea_schema = TareaSchema()
 
 api = Api(tarea_router)
 
+def get_tarea_actual(tablero_id : int, tarea_id : int):
+    tarea_actual = Tarea.get_by_id(tarea_id)
+    if tarea_actual == None:
+        raise ResourceNotFoundError(
+            "error: La tarea " + str(tarea_id) + " no existe")
+    if tarea_actual.tablero_id != tablero_id:
+        raise PermissionError(
+            "error: La tarea " + str(tarea_id) + " no pertenece al tablero " + str(tablero_id))
+    return tarea_actual
+
 class TareaListResource(Resource):
     def get(self, tablero_id : int):
         tablero = Tablero.get_by_id(tablero_id)
@@ -36,21 +46,14 @@ class TareaListResource(Resource):
 
 class TareaResource(Resource):
     def get(self, tablero_id : int, tarea_id: int):
-        tarea_actual = Tarea.get_by_id(tarea_id)
-        if tarea_actual == None:
-            raise ResourceNotFoundError("error: La tarea " + str(tarea_id) + " no existe")
-        if tarea_actual.tablero_id != tablero_id:
-            raise PermissionError("error: La tarea " + str(tarea_id) + " no pertenece al tablero " + str(tablero_id))
+        tarea_actual = get_tarea_actual(tablero_id, tarea_id)
         result = tarea_schema.dump(tarea_actual)
         return result
 
     def delete(self, tablero_id : int, tarea_id : int):
-        tarea_actual = Tarea.get_by_id(tarea_id)
-        if tarea_actual == None:
-            raise ResourceNotFoundError("error: La tarea " + str(tarea_id) + " no existe")
-        if tarea_actual.tablero_id != tablero_id:
-            raise PermissionError("error: La tarea " + str(tarea_id) + " no pertenece al tablero " + str(tablero_id))
+        tarea_actual = get_tarea_actual(tablero_id, tarea_id)
 
+        #Se eliminan todas las transiciones realizadas de la tarea eliminada
         transiciones_tarea_a_borrar = Transicion_realizada.simple_filter(tarea_id=tarea_id)
 
         for transicion in transiciones_tarea_a_borrar:
@@ -60,6 +63,8 @@ class TareaResource(Resource):
         tarea_actual.delete()
         return result
 
+    def update(self, tablero_id : int, tarea_id : int):
+        tarea_actual = get_tarea_actual(tablero_id, tarea_id)    
 
 api.add_resource(TareaResource, '/tableros/<int:tablero_id>/tareas/<int:tarea_id>/',
                  endpoint='tareas_resource')

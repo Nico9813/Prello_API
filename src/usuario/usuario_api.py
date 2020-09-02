@@ -40,6 +40,10 @@ class UsuarioPrueba(Resource):
         Primer_tarea: Tarea = Tarea('Tituloo', 'Descripcion larga', estado=TODO)
 
         Proyecto: Tablero = Tablero('Proyecto')
+
+        Proyecto.agregar_estado(TODO)
+        Proyecto.agregar_estado(DOING)
+
         SegundoProyecto: Tablero = Tablero('Segundo Proyecto')
         Proyecto.agregar_tarea(Primer_tarea)
 

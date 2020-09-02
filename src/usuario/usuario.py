@@ -18,7 +18,13 @@ class Usuario(db.Model, BaseModel, Interesado):
     __tablename__ = 'usuarios'
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(80), nullable=False)
-    tableros = db.relationship('Tablero', secondary=usuarioXtablero, lazy='subquery')
+    tableros = db.relationship(
+        'Tablero', 
+        secondary=usuarioXtablero, 
+        lazy='subquery',
+        passive_deletes=True, 
+        cascade="all, delete"
+    )
     roles = db.relationship('Rol', lazy=True)
 
     def __str__(self):

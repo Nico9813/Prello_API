@@ -14,9 +14,9 @@ class RolSchema(ma.Schema):
 class TableroSchema(ma.Schema):
     id          = fields.Integer(dump_only=True)
     nombre      = fields.String()
-    workflow    = fields.Nested('WorkflowSchema', many=False)
-    tareas      = fields.Nested('TareaSchema', many=True)
-    transiciones= fields.Nested('TransicionRealizadaSchema', many=True)
+    workflow    = fields.Nested('WorkflowSchema', many=False, dump_only=True)
+    tareas      = fields.Nested('TareaSchema', many=True, dump_only=True)
+    transiciones= fields.Nested('TransicionRealizadaSchema', many=True, dump_only=True)
 
 class WorkflowSchema(ma.Schema):
     id          = fields.Integer(dump_only=True)
