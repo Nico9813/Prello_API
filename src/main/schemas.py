@@ -24,9 +24,9 @@ class WorkflowSchema(ma.Schema):
 
 class TransicionRealizadaSchema(ma.Schema):
     id          = fields.Integer(dump_only=True)
-    tarea       = fields.Nested('TareaSchema', many=False)
-    estado_inicial = fields.Nested('EstadoSchema', many=False)
-    estado_final = fields.Nested('EstadoSchema', many=False)
+    tarea       = fields.Nested('TareaSchema', many=False, dump_only=True)
+    estado_inicial = fields.Nested('EstadoSchema', many=False, dump_only=True)
+    estado_final = fields.Nested('EstadoSchema', many=False, dump_only=True)
     id_estado_final = fields.Integer(load_only=True)
     id_tarea        = fields.Integer(load_only=True)
 

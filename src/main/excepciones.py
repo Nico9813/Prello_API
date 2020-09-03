@@ -3,6 +3,11 @@ class AuthError(Exception):
         self.error = error
         self.status_code = status_code
 
+class TransicionNoValidaError(Exception):
+    def __init__(self, error):
+        self.error = error
+        self.status_code = 402
+
 class ResourceNotFoundError(Exception):
     def __init__(self, error):
         self.error = error

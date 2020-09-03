@@ -4,7 +4,7 @@ from flask_restful import Api, Resource
 from main.autentificacion import requires_auth, get_id_usuario_actual
 from main.db import db
 
-from main.excepciones import ResourceNotFoundError, PermissionError
+from main.excepciones import ResourceNotFoundError, PermissionError, TransicionNoValidaError
 
 from .tablero import Tablero
 from tarea.tarea import Tarea
@@ -61,13 +61,42 @@ class TableroResource(Resource):
 
 transicion_realizada_schema = TransicionRealizadaSchema()
 
-
 class TransicionesRealizadasResource(Resource):
 
     def get(self, tablero_id : int):
         tablero_actual = Tablero.get_by_id(tablero_id)
         result = transicion_realizada_schema.dump(tablero_actual.transiciones, many=True)
         return result
+
+    def post(self, tablero_id : int):
+        data = request.get_json()
+        tablero_actual = Tablero.get_by_id(tablero_id)
+        transicion_a_realizar_dicc = transicion_realizada_schema.load(data)
+        id_tarea = transicion_a_realizar_dicc['id_tarea']
+        id_estado_final = transicion_a_realizar_dicc['id_estado_final']
+        tarea_actual = Tarea.get_by_id(id_tarea)
+        estado_final = Estado.get_by_id(id_estado_final)
+
+        if estado_final is None:
+            raise ResourceNotFoundError(
+                "El estado " + str(id_estado_final) + " no existe en el tablero")
+        if tarea_actual is None:
+            raise ResourceNotFoundError(
+                "La tarea " + str(id_tarea) + " no existe en el tablero")
+        if tarea_actual.tablero_id != tablero_id:
+            raise PermissionError(
+                "error: La tarea " + str(tarea_id) + " no pertenece al tablero " + str(tablero_id))
+
+        try:
+            transicion_realizada = tablero_actual.ejecutar_transicion(tarea_actual, estado_final)
+            transicion_realizada.save()
+            result = transicion_realizada_schema.dump(transicion_realizada)
+        except TransicionNoValidaError as ex:
+            result = jsonify(ex.error)
+            result.status_code = 401
+
+        return result
+
 
 transicion_posible_schema = TransicionPosibleSchema()
 

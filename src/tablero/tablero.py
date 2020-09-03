@@ -36,6 +36,9 @@ class Tablero(Observable):
     def agregar_tarea(self, tarea : Tarea):
         self.tareas.append(tarea)
 
+    def get_estados_posibles(self, estado : Estado):
+        return self.workflow.get_estados_posibles(estado)
+
     def obtener_eventos_posibles(self) -> list:
         return list(Evento)
 
@@ -45,10 +48,11 @@ class Tablero(Observable):
     def ejecutar_transicion(self, tarea: Tarea, estado_final: Estado):
         transicion_historico : Transicion_realizada = Transicion_realizada(tarea, estado_final)
         
-        acciones_ejecutadas = self.workflow.ejecutar_transicion(tarea, estado_final)
+        transicion_realizada = self.workflow.ejecutar_transicion(tarea, estado_final)
 
         self.transiciones.append(transicion_historico)
-
+        
+        return transicion_historico
         
 
         

@@ -6,6 +6,7 @@ from main.excepciones import ResourceNotFoundError, PermissionError
 from main.db import db
 
 from tarea.estado import Estado
+from tablero.tablero import Tablero
 
 from main.schemas import EstadoSchema
 
@@ -46,7 +47,19 @@ class EstadoResource(Resource):
         result = estado_schema.dump(estado_actual)
         return result
 
+class EstadoPosibleResource(Resource):
+    def get(self, tablero_id : int, estado_id :int):
+        tablero_actual = Tablero.get_by_id(tablero_id)
+        estado_inicial = Estado.get_by_id(estado_id)
+        estados_posibles = tablero_actual.get_estados_posibles(estado_inicial)
+        result = estado_schema.dump(estados_posibles, many=True)
+        return result
+
 api.add_resource(EstadoResource, '/tableros/<int:tablero_id>/estados/<int:estado_id>/',
-                 endpoint='estado_resource')
+                 endpoint='estados_resource')
+
+api.add_resource(EstadoPosibleResource, '/tableros/<int:tablero_id>/estados/<int:estado_id>/posibles',
+                 endpoint='estados_posibles_resource')
+
 api.add_resource(EstadoListResource, '/tableros/<int:tablero_id>/estados',
-                 endpoint='estado_list_resource')
+                 endpoint='estados_list_resource')
