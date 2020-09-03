@@ -25,7 +25,7 @@ class UsuarioPrueba(Resource):
         from evento.accion import Accion_mock
         from evento.subscripcion import Subscripcion
         from workflow.workflow import Workflow
-        from workflow.transicion_posible import Transicion_posible
+        from workflow.transicion_posible import TransicionPosible
 
         User: Usuario = Usuario('Rodrigo')
         QA: Rol = Rol('QA')

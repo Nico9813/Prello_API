@@ -64,7 +64,7 @@ class TareaResource(Resource):
         return result
 
     def update(self, tablero_id : int, tarea_id : int):
-        tarea_actual = get_tarea_actual(tablero_id, tarea_id)    
+        tarea_actual = get_tarea_actual(tablero_id, tarea_id)
 
 api.add_resource(TareaResource, '/tableros/<int:tablero_id>/tareas/<int:tarea_id>/',
                  endpoint='tareas_resource')

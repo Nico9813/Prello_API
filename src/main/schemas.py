@@ -27,12 +27,16 @@ class TransicionRealizadaSchema(ma.Schema):
     tarea       = fields.Nested('TareaSchema', many=False)
     estado_inicial = fields.Nested('EstadoSchema', many=False)
     estado_final = fields.Nested('EstadoSchema', many=False)
+    id_estado_final = fields.Integer(load_only=True)
+    id_tarea        = fields.Integer(load_only=True)
 
-class TransicionPosible(ma.Schema):
+class TransicionPosibleSchema(ma.Schema):
     id          = fields.Integer(dump_only=True)
-    acciones    = fields.Nested('AccionSchema', many=True)
-    estado_inicial = fields.Nested('EstadoSchema', many=False)
-    estado_final = fields.Nested('EstadoSchema', many=False)
+    acciones    = fields.Nested('AccionSchema', many=True, dump_only=True)
+    estado_inicial = fields.Nested('EstadoSchema', many=False, dump_only=True)
+    estado_final = fields.Nested('EstadoSchema', many=False, dump_only=True)
+    id_estado_inicial = fields.Integer(load_only=True)
+    id_estado_final = fields.Integer(load_only=True)
 
 class EstadoSchema(ma.Schema):
     id          = fields.Integer(dump_only=True)

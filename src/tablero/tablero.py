@@ -7,7 +7,7 @@ from .transicion_realizada import Transicion_realizada
 from evento.evento import Evento
 from tarea.estado import Estado
 from workflow.workflow import Workflow
-from workflow.transicion_posible import Transicion_posible
+from workflow.transicion_posible import TransicionPosible
 
 class Tablero(Observable):
     __tablename__ = 'tableros'
@@ -38,6 +38,9 @@ class Tablero(Observable):
 
     def obtener_eventos_posibles(self) -> list:
         return list(Evento)
+
+    def agregar_transicion(self, estado_inicial : Estado, estado_final : Estado):
+        return self.workflow.agregar_transicion(estado_inicial, estado_final)
 
     def ejecutar_transicion(self, tarea: Tarea, estado_final: Estado):
         transicion_historico : Transicion_realizada = Transicion_realizada(tarea, estado_final)

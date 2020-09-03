@@ -1,6 +1,6 @@
 from main.db import db, BaseModel
 
-from .transicion_posible import Transicion_posible
+from .transicion_posible import TransicionPosible
 from tarea.estado import Estado
 from evento.accion import Accion
 from pommons.list import find
@@ -9,18 +9,18 @@ import functools
 
 class Workflow(db.Model, BaseModel):
     __tablename__ = 'workflows'
-    transiciones_posibles: list = db.relationship('Transicion_posible', lazy = True)
+    transiciones_posibles: list = db.relationship('TransicionPosible', lazy = True)
 
     id = db.Column(db.Integer, primary_key=True)
 
     def __init__(self):
         self.transiciones_posibles = []
 
-    def es_la_transicion(self, estado_inicial: Estado, estado_final: Estado, transicion: Transicion_posible) -> bool:
+    def es_la_transicion(self, estado_inicial: Estado, estado_final: Estado, transicion: TransicionPosible) -> bool:
         return estado_inicial == transicion.estado_inicial and estado_final == transicion.estado_final
 
     def agregar_transicion(self, estado_inicial: Estado, estado_final: Estado):
-        transicion_nueva = Transicion_posible(estado_inicial, estado_final)
+        transicion_nueva = TransicionPosible(estado_inicial, estado_final)
         self.transiciones_posibles.append(transicion_nueva)
         return transicion_nueva
 
