@@ -37,6 +37,7 @@ class Workflow(db.Model, BaseModel):
             else:
                 transicion_nueva = self.agregar_transicion(estado_inicial, estado_final)
                 transicion_nueva.agregar_accion(accion)
+            return transicion
 
     def obtener_transicion(self, estado_inicial: Estado, estado_final: Estado) -> list:
         transicion_correcta = find(self.transiciones_posibles, lambda transicion: self.es_la_transicion(estado_inicial, estado_final, transicion))

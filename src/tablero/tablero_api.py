@@ -9,6 +9,7 @@ from main.excepciones import ResourceNotFoundError, PermissionError, TransicionN
 from .tablero import Tablero
 from tarea.tarea import Tarea
 from tarea.estado import Estado
+from evento.accion import AccionFactory
 from workflow.transicion_posible import TransicionPosible
 from usuario.usuario import Usuario
 from main.schemas import TableroSchema, TransicionRealizadaSchema, TransicionPosibleSchema
@@ -121,7 +122,27 @@ class TransicionesPosiblesResource(Resource):
         result = transicion_posible_schema.dump(transicion_posible_nueva)
         return result
 
+    def put(self, tablero_id : int):
+        data = request.get_json()
+        id_estado_inicial = data['id_estado_inicial']
+        id_estado_final = data['id_estado_final']
+        accion = data['accion']
+        accion_a_agregar = AccionFactory.crear_instancia(accion['type'], accion['payload'])
+        estado_inicial = Estado.get_by_id(id_estado_inicial)
+        estado_final = Estado.get_by_id(id_estado_final)
+        tablero_actual = Tablero.get_by_id(tablero_id)
+
+        if estado_inicial is None:
+            raise ResourceNotFoundError("El estado " + str(id_estado_inicial) + " no existe en el tablero")
+        if estado_final is None:
+            raise ResourceNotFoundError("El estado " + str(id_estado_final) + " no existe en el tablero")
+
+        transicion_modificada = tablero_actual.workflow.agregar_accion_entre_estados(estado_inicial, estado_final, accion_a_agregar)
+        transicion_modificada.save()
+        result = transicion_posible_schema.dump(transicion_modificada)
+        return result
+
 api.add_resource(TableroResource, '/tableros/<int:tablero_id>', endpoint='tableros_resource')
-api.add_resource(TransicionesRealizadasResource, '/tableros/<int:tablero_id>/historial', endpoint='transiciones_realizadas_resource')
-api.add_resource(TransicionesPosiblesResource, '/tableros/<int:tablero_id>/transiciones', endpoint='transiciones_posibles_resource')
+api.add_resource(TransicionesRealizadasResource, '/tableros/<int:tablero_id>/transiciones', endpoint='transiciones_realizadas_resource')
+api.add_resource(TransicionesPosiblesResource, '/tableros/<int:tablero_id>/transiciones_posibles', endpoint='transiciones_posibles_resource')
 api.add_resource(TableroListResource, '/tableros', endpoint='tableros_list_resource')

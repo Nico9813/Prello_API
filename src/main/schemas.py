@@ -52,6 +52,7 @@ class TareaSchema(ma.Schema):
 
 class AccionSchema(ma.Schema):
     id          = fields.Integer(dump_only=True)
+    tipo_accion = fields.String(load_only=True)
 
 class AccionMockSchema(AccionSchema):
     contador    = fields.Integer()
