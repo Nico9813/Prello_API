@@ -6,6 +6,7 @@ from tablero.tablero_api import tablero_router
 from tarea.tarea_api import tarea_router
 from tarea.estado_api import estado_router
 from evento.accion_api import acciones_router
+from evento.subscripcion_api import subscripciones_router
 from .ext import ma, migrate
 from .excepciones import ResourceNotFoundError, PermissionError, AuthError
 
@@ -30,6 +31,7 @@ def create_app(settings_module):
     app.register_blueprint(tarea_router)
     app.register_blueprint(estado_router)
     app.register_blueprint(acciones_router)
+    app.register_blueprint(subscripciones_router)
 
     # Registra manejadores de errores personalizados
     register_error_handlers(app)

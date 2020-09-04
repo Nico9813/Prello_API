@@ -53,6 +53,14 @@ class TareaSchema(ma.Schema):
 class AccionSchema(ma.Schema):
     id          = fields.Integer(dump_only=True)
     tipo_accion = fields.String(load_only=True)
+    payload     = fields.Raw(required=True)
 
 class AccionMockSchema(AccionSchema):
     contador    = fields.Integer()
+
+class SubscripcionSchema(ma.Schema):
+    id          = fields.Integer(dump_only=True)
+    tipo_objeto = fields.String() #Validar observables
+    id_objeto   = fields.Integer()
+    accion      = fields.Nested('AccionSchema', many=False)
+    evento      = fields.String() #Validar evento segun observable
