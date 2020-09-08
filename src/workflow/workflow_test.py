@@ -13,20 +13,19 @@ def test_ejecutar_transicion():
 	workflow = Workflow()
 	to_do = Estado("TODO")
 	doing = Estado("DOING")
-	tarea = Tarea(to_do, "Titulo", "Descripcion")
+	tarea = Tarea("Titulo", "Descripcion", estado=to_do)
 	accion_contador = Accion_mock()
 	workflow.agregar_transicion(to_do, doing)
 	workflow.agregar_accion_entre_estados(to_do, doing, accion_contador)
-	acciones_realizadas = workflow.ejecutar_transicion(tarea, doing)
+	workflow.ejecutar_transicion(tarea, doing)
 	assert accion_contador.contador == 1
-	assert accion_contador in acciones_realizadas
 	assert tarea.estado == doing
 
 def ejecutar_transicion_no_valida():
 	workflow = Workflow()
 	to_do = Estado("TODO")
 	doing = Estado("DOING")
-	tarea = Tarea(to_do, "Titulo", "Descripcion")
+	tarea = Tarea("Titulo", "Descripcion", estado=to_do)
 	#acciones_realizadas = workflow.ejecutar_transicion(tarea, doing)
 	assert 1 == 1
 	

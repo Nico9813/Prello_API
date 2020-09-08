@@ -14,11 +14,11 @@ class Tablero(Observable):
     id = db.Column(db.Integer, primary_key=True)
     workflow_id = db.Column(db.Integer, db.ForeignKey('workflows.id'), nullable=True)
 
-    workflow: Workflow = db.relationship('Workflow', lazy=True, foreign_keys=[workflow_id])
+    workflow: Workflow = db.relationship('Workflow', cascade="all, delete", lazy=True, foreign_keys=[workflow_id])
     nombre = db.Column(db.String(80), nullable=True)
-    tareas = db.relationship('Tarea', lazy=True)
-    transiciones = db.relationship('Transicion_realizada', lazy=True)
-    estados = db.relationship('Estado', lazy=True)
+    tareas = db.relationship('Tarea', cascade="all, delete", lazy=True)
+    transiciones = db.relationship('Transicion_realizada', cascade="all, delete",lazy=True)
+    estados = db.relationship('Estado', cascade="all, delete", lazy=True)
 
     def __init__(self, nombre: str):
         self.nombre = nombre

@@ -10,8 +10,8 @@ from .rol import Rol
 from tarea.estado import Estado
 
 usuarioXtablero = db.Table('asignaciones',
-    db.Column('usuario_id',db.Integer, db.ForeignKey('usuarios.id'), primary_key=True),
-    db.Column('tablero_id',db.Integer, db.ForeignKey('tableros.id'), primary_key=True)
+    db.Column('usuario_id',db.Integer, db.ForeignKey('usuarios.id', ondelete="CASCADE"), primary_key=True),
+    db.Column('tablero_id',db.Integer, db.ForeignKey('tableros.id', ondelete="CASCADE"), primary_key=True)
 )
 
 class Usuario(db.Model, BaseModel, Interesado):
@@ -25,7 +25,7 @@ class Usuario(db.Model, BaseModel, Interesado):
         passive_deletes=True, 
         cascade="all, delete"
     )
-    roles = db.relationship('Rol', lazy=True)
+    roles = db.relationship('Rol', cascade="all, delete", lazy=True)
 
     def __str__(self):
         return "Nombre: " + self.nombre

@@ -32,7 +32,7 @@ class TareaListResource(Resource):
     def get(self, tablero_id : int):
         tablero = Tablero.get_by_id(tablero_id)
         result = tarea_schema.dump(tablero.tareas, many=True)
-        return result
+        return result, 200
 
     def post(self, tablero_id: int):
         data = request.get_json()
@@ -48,7 +48,7 @@ class TareaResource(Resource):
     def get(self, tablero_id : int, tarea_id: int):
         tarea_actual = get_tarea_actual(tablero_id, tarea_id)
         result = tarea_schema.dump(tarea_actual)
-        return result
+        return result, 200
 
     def delete(self, tablero_id : int, tarea_id : int):
         tarea_actual = get_tarea_actual(tablero_id, tarea_id)
@@ -61,7 +61,7 @@ class TareaResource(Resource):
 
         result = tarea_schema.dump(tarea_actual)
         tarea_actual.delete()
-        return result
+        return result, 200
 
     def update(self, tablero_id : int, tarea_id : int):
         tarea_actual = get_tarea_actual(tablero_id, tarea_id)

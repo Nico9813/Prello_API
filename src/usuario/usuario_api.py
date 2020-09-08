@@ -63,13 +63,15 @@ class UsuarioPrueba(Resource):
 
         User.save()
 
-        return jsonify({'message': "Usuario de prueba cargado correctamente"})
+        result = usuario_schema.dump(User)
+
+        return result, 200
 
 class UsuarioResource(Resource):
     def get(self):
         usuario_actual = Usuario.get_by_id(get_id_usuario_actual())
         result = usuario_schema.dump(usuario_actual)
-        return result
+        return result, 200
 
 api.add_resource(UsuarioResource, '/perfil', endpoint='usuarios_resource')
 api.add_resource(UsuarioPrueba, '/', endpoint='usuario_prueba')

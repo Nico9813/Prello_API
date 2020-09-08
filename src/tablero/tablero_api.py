@@ -25,7 +25,7 @@ class TableroListResource(Resource):
     def get(self):
         usuario_actual = Usuario.get_by_id(get_id_usuario_actual())
         result = tablero_schema.dump(usuario_actual.tableros, many=True)
-        return result
+        return result, 200
     
     def post(self):
         data = request.get_json()
@@ -38,14 +38,14 @@ class TableroListResource(Resource):
         usuario_actual.save()
 
         result = tablero_schema.dump(tablero_nuevo)
-        return result
+        return result, 201
 
 class TableroResource(Resource):
 
     def get(self, tablero_id : int):
         tablero_actual = Tablero.get_by_id(tablero_id)
         result = tablero_schema.dump(tablero_actual)
-        return result
+        return result, 200
     
     def delete(self, tablero_id : int):
         tablero_actual = Tablero.get_by_id(tablero_id)
@@ -58,7 +58,7 @@ class TableroResource(Resource):
             tarea.delete()
 
         tablero_actual.delete()
-        return result
+        return result, 200
 
 transicion_realizada_schema = TransicionRealizadaSchema()
 
@@ -67,7 +67,7 @@ class TransicionesRealizadasResource(Resource):
     def get(self, tablero_id : int):
         tablero_actual = Tablero.get_by_id(tablero_id)
         result = transicion_realizada_schema.dump(tablero_actual.transiciones, many=True)
-        return result
+        return result, 200
 
     def post(self, tablero_id : int):
         data = request.get_json()
@@ -96,7 +96,7 @@ class TransicionesRealizadasResource(Resource):
             result = jsonify(ex.error)
             result.status_code = 401
 
-        return result
+        return result, 201
 
 
 transicion_posible_schema = TransicionPosibleSchema()
@@ -120,7 +120,7 @@ class TransicionesPosiblesResource(Resource):
         transicion_posible_nueva = tablero_actual.agregar_transicion(estado_inicial, estado_final)
         tablero_actual.save()
         result = transicion_posible_schema.dump(transicion_posible_nueva)
-        return result
+        return result, 201
 
     def put(self, tablero_id : int):
         data = request.get_json()
@@ -140,7 +140,7 @@ class TransicionesPosiblesResource(Resource):
         transicion_modificada = tablero_actual.workflow.agregar_accion_entre_estados(estado_inicial, estado_final, accion_a_agregar)
         transicion_modificada.save()
         result = transicion_posible_schema.dump(transicion_modificada)
-        return result
+        return result, 200
 
 api.add_resource(TableroResource, '/tableros/<int:tablero_id>', endpoint='tableros_resource')
 api.add_resource(TransicionesRealizadasResource, '/tableros/<int:tablero_id>/transiciones', endpoint='transiciones_realizadas_resource')

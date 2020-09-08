@@ -34,7 +34,7 @@ class Accion(db.Model, BaseModel):
     }
 
 class Accion_mock(Accion):
-    contador : int = db.Column(db.Integer, nullable=False)
+    contador: int = db.Column(db.Integer, default=0)
 
     def __init__(self, payload = {}):
         self.contador = 0
@@ -48,7 +48,7 @@ class Accion_mock(Accion):
 
 
 class Accion_mock_2(Accion):
-    contador_2: int = db.Column(db.Integer, nullable=False)
+    contador_2: int = db.Column(db.Integer, default=0)
 
     def __init__(self, payload={}):
         self.contador_2 = 0
