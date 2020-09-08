@@ -26,6 +26,7 @@ class Tablero(Observable):
         self.tareas = []
         self.transiciones = []
         self.estados = []
+        self.workflow = Workflow()
     
     def __str__(self):
         return "Nombre tablero: " + self.nombre

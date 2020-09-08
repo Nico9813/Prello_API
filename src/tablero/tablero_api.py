@@ -86,17 +86,18 @@ class TransicionesRealizadasResource(Resource):
                 "La tarea " + str(id_tarea) + " no existe en el tablero")
         if tarea_actual.tablero_id != tablero_id:
             raise PermissionError(
-                "error: La tarea " + str(tarea_id) + " no pertenece al tablero " + str(tablero_id))
+                "error: La tarea " + str(id_tarea) + " no pertenece al tablero " + str(tablero_id))
 
         try:
             transicion_realizada = tablero_actual.ejecutar_transicion(tarea_actual, estado_final)
             transicion_realizada.save()
             result = transicion_realizada_schema.dump(transicion_realizada)
+            status_code = 201
         except TransicionNoValidaError as ex:
-            result = jsonify(ex.error)
-            result.status_code = 401
+            result = jsonify("transicion no valida")
+            status_code = 401
 
-        return result, 201
+        return result, status_code
 
 
 transicion_posible_schema = TransicionPosibleSchema()

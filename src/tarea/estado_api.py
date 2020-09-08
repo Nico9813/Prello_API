@@ -50,7 +50,7 @@ class EstadoResource(Resource):
 class EstadoPosibleResource(Resource):
     def get(self, tablero_id : int, estado_id :int):
         tablero_actual = Tablero.get_by_id(tablero_id)
-        estado_inicial = Estado.get_by_id(estado_id)
+        estado_inicial = get_estado_actual(tablero_id, estado_id)
         estados_posibles = tablero_actual.get_estados_posibles(estado_inicial)
         result = estado_schema.dump(estados_posibles, many=True)
         return result

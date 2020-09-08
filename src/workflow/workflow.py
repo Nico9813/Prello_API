@@ -30,7 +30,7 @@ class Workflow(db.Model, BaseModel):
         return transicion_nueva
 
     def agregar_accion_entre_estados(self, estado_inicial: Estado, estado_final: Estado, accion: Accion):
-        transicion: Transicion_posible = self.obtener_transicion(estado_inicial, estado_final)
+        transicion: TransicionPosible = self.obtener_transicion(estado_inicial, estado_final)
         if transicion is not None:
             transicion.agregar_accion(accion)
         else:
@@ -43,7 +43,7 @@ class Workflow(db.Model, BaseModel):
         return transicion_correcta
 
     def ejecutar_transicion(self, tarea : Tarea, estado_final : Estado) -> list:
-        transicion_a_ejecutar : Transicion_posible = self.obtener_transicion(tarea.estado, estado_final)
+        transicion_a_ejecutar : TransicionPosible = self.obtener_transicion(tarea.estado, estado_final)
 
         if transicion_a_ejecutar is None:
             raise TransicionNoValidaError("La transicion no es valida")
