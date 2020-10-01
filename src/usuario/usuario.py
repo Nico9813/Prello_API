@@ -10,14 +10,14 @@ from .rol import Rol
 from tarea.estado import Estado
 
 usuarioXtablero = db.Table('asignaciones',
-    db.Column('usuario_id',db.Integer, db.ForeignKey('usuarios.id', ondelete="CASCADE"), primary_key=True),
+    db.Column('usuario_id',db.String(100), db.ForeignKey('usuarios.id', ondelete="CASCADE"), primary_key=True),
     db.Column('tablero_id',db.Integer, db.ForeignKey('tableros.id', ondelete="CASCADE"), primary_key=True)
 )
 
 class Usuario(db.Model, BaseModel, Interesado):
     __tablename__ = 'usuarios'
-    id = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(80), nullable=False)
+    id = db.Column(db.String(100), primary_key=True)
+    nombre = db.Column(db.String(80), nullable=True)
     tableros = db.relationship(
         'Tablero', 
         secondary=usuarioXtablero, 
@@ -30,8 +30,8 @@ class Usuario(db.Model, BaseModel, Interesado):
     def __str__(self):
         return "Nombre: " + self.nombre
         
-    def __init__(self, nombre: str):
-        self.nombre = nombre
+    def __init__(self, id: str):
+        self.id = id
 
     def agregar_tablero(self, tablero : Tablero):
         self.tableros.append(tablero)

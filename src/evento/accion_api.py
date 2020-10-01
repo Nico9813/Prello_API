@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_restful import Api, Resource
 
-from main.autentificacion import requires_auth, get_id_usuario_actual
+from main.autentificacion import requires_auth, get_usuario_actual
 from main.db import db
 
 from main.excepciones import ResourceNotFoundError, PermissionError, TransicionNoValidaError

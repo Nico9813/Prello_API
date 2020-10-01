@@ -1,6 +1,7 @@
 from six.moves.urllib.request import urlopen
 from functools import wraps
 from flask import request, _request_ctx_stack, jsonify
+from usuario.usuario import Usuario
 from jose import jwt
 import json
 from .config import AUTH0_DOMAIN, API_AUDIENCE, ALGORITHMS
@@ -9,8 +10,13 @@ from .excepciones import AuthError
 # Para obtener el token de acceso POST https://dev-jx8fysvq.us.auth0.com/oauth/token HEADERS { "content-type": "application/json"}
 # Para acceder a una ruta privada HEADERS { "content-type": "application/json", "Authorization": "Bearer TOKEN_ACCESO"}
 
-def get_id_usuario_actual():
-    return 1
+def get_usuario_actual():
+    id_actual = _request_ctx_stack.top.current_user['sub']
+    usuario_actual = Usuario.get_by_id(id_actual)
+    if not usuario_actual:
+        usuario_actual = Usuario(id_actual)
+        usuario_actual.save()
+    return usuario_actual
 
 def get_token_auth_header():
     auth = request.headers.get("Authorization", None)

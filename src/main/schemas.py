@@ -2,7 +2,6 @@ from marshmallow  import fields
 from main.ext import ma
 
 class UsuarioSchema(ma.Schema):
-    id          = fields.Integer(dump_only=True)
     nombre      = fields.String()
     tableros    = fields.Nested('TableroSchema', many=True)
     roles       = fields.Nested('RolSchema', many=True)
@@ -17,6 +16,7 @@ class TableroSchema(ma.Schema):
     workflow    = fields.Nested('WorkflowSchema', many=False, dump_only=True)
     tareas      = fields.Nested('TareaSchema', many=True, dump_only=True)
     transiciones= fields.Nested('TransicionRealizadaSchema', many=True, dump_only=True)
+    estados     = fields.Nested('EstadoSchema', many=True, dump_only=True)
 
 class WorkflowSchema(ma.Schema):
     id          = fields.Integer(dump_only=True)

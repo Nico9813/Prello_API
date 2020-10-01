@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
 from flask_restful import Api, Resource
 
-from main.autentificacion import requires_auth, get_id_usuario_actual
+from main.autentificacion import requires_auth, get_usuario_actual
 from main.db import db
 from .usuario import Usuario
 from main.schemas import UsuarioSchema
@@ -27,7 +27,12 @@ class UsuarioPrueba(Resource):
         from workflow.workflow import Workflow
         from workflow.transicion_posible import TransicionPosible
 
-        User: Usuario = Usuario('Rodrigo')
+        usuario_prueba = Usuario.get_by_id("1")
+        if usuario_prueba is not None:
+            return usuario_schema.dump(usuario_prueba)
+
+        User: Usuario = Usuario("1")
+        User.nombre = 'Rodrigo'
         QA: Rol = Rol('QA')
 
         TODO: Estado = Estado('TODO')
@@ -69,9 +74,18 @@ class UsuarioPrueba(Resource):
 
 class UsuarioResource(Resource):
     def get(self):
-        usuario_actual = Usuario.get_by_id(get_id_usuario_actual())
+        usuario_actual = get_usuario_actual()
+        result = usuario_schema.dump(usuario_actual)
+        return result, 200
+
+
+class PrivatePrueba(Resource):
+    @requires_auth
+    def get(self):
+        usuario_actual = get_usuario_actual()
         result = usuario_schema.dump(usuario_actual)
         return result, 200
 
 api.add_resource(UsuarioResource, '/perfil', endpoint='usuarios_resource')
 api.add_resource(UsuarioPrueba, '/', endpoint='usuario_prueba')
+api.add_resource(PrivatePrueba, '/privado', endpoint='private_prueba')

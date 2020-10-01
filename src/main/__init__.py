@@ -1,6 +1,8 @@
 from flask import Flask, jsonify
 from flask_restful import Api
+from flask_cors import CORS, cross_origin
 from .db import db
+from usuario.usuario import Usuario
 from usuario.usuario_api import usuario_router
 from tablero.tablero_api import tablero_router
 from tarea.tarea_api import tarea_router
@@ -12,9 +14,22 @@ from .excepciones import ResourceNotFoundError, PermissionError, AuthError
 
 def create_app(settings_module):
     app = Flask(__name__)
+    cors = CORS(app)
     app.config.from_object(settings_module)
 
     # Inicializa las extensiones
+    from usuario.rol import Rol
+    from tarea.estado import Estado
+    from tarea.tarea import Tarea
+    from tablero.tablero import Tablero
+    from usuario.usuario import Usuario
+    from tablero.transicion_realizada import Transicion_realizada
+    from evento.observable import Observable
+    from evento.evento import Evento
+    from evento.accion import Accion_mock
+    from evento.subscripcion import Subscripcion
+    from workflow.workflow import Workflow
+    from workflow.transicion_posible import TransicionPosible
     db.init_app(app)
     ma.init_app(app)
     migrate.init_app(app, db)

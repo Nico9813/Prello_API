@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_restful import Api, Resource
 
-from main.autentificacion import requires_auth, get_id_usuario_actual
+from main.autentificacion import requires_auth, get_usuario_actual
 from main.db import db
 
 from main.excepciones import ResourceNotFoundError, PermissionError, TransicionNoValidaError
@@ -23,14 +23,14 @@ api = Api(tablero_router)
 class TableroListResource(Resource):
 
     def get(self):
-        usuario_actual = Usuario.get_by_id(get_id_usuario_actual())
+        usuario_actual = get_usuario_actual()
         result = tablero_schema.dump(usuario_actual.tableros, many=True)
         return result, 200
     
     def post(self):
         data = request.get_json()
         tablero_nuevo_dicc = tablero_schema.load(data)
-        usuario_actual = Usuario.get_by_id(get_id_usuario_actual())
+        usuario_actual = get_usuario_actual()
 
         tablero_nuevo = Tablero(tablero_nuevo_dicc['nombre'])
 

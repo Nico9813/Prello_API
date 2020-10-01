@@ -1,32 +1,34 @@
-version: '3'
+version: "3"
 
 services:
-    mysql-development:
-        image: mysql:8.0.17
-        environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: testapp
-            MYSQL_NATIVE_PASSWORD: root
-        ports:
-            - "3307:3306"
-            
-    server:
-        build: .
-        depends_on: 
-            - mysql-development
-        command: sh -c "/wait && flask run --host=0.0.0.0"
-        environment:
-            - WAIT_HOSTS=mysql-development:3306
-            - WAIT_HOSTS_TIMEOUT=300
-            - WAIT_SLEEP_INTERVAL=5
-            - WAIT_HOST_CONNECT_TIMEOUT=30
-            - APP_SETTINGS_MODULE=main.config
-        ports:
-            - "5000:5000"
-        volumes:
-            - .:/app
+  mysql-development:
+    image: mysql
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: testapp
+      MYSQL_NATIVE_PASSWORD: root
+    ports:
+      - "3306:3306"
 
-    admin:    
-        image: adminer    
-        ports:      
-            - "8081:8080"
+  server:
+    build: .
+    depends_on:
+      - mysql-development
+    command: sh -c "/wait && flask run --host=0.0.0.0"
+    environment:
+      - WAIT_HOSTS=mysql-development:3306
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=5
+      - WAIT_HOST_CONNECT_TIMEOUT=30
+      - APP_SETTINGS_MODULE=main.config
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+
+  admin:
+    image: adminer
+    ports:
+      - "8080:8080"
