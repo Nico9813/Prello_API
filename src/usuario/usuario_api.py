@@ -14,72 +14,9 @@ api = Api(usuario_router)
 
 class UsuarioPrueba(Resource):
     def get(self):
-        from usuario.rol import Rol
-        from tarea.estado import Estado
-        from tarea.tarea import Tarea
-        from tablero.tablero import Tablero
-        from usuario.usuario import Usuario
-        from tablero.transicion_realizada import Transicion_realizada
-        from evento.observable import Observable
-        from evento.evento import Evento
-        from evento.accion import Accion_mock
-        from evento.subscripcion import Subscripcion
-        from workflow.workflow import Workflow
-        from workflow.transicion_posible import TransicionPosible
-
-        usuario_prueba = Usuario.get_by_id("1")
-        if usuario_prueba is not None:
-            return usuario_schema.dump(usuario_prueba)
-
-        User: Usuario = Usuario("1")
-        User.nombre = 'Rodrigo'
-        QA: Rol = Rol('QA')
-
-        TODO: Estado = Estado('TODO')
-        DOING: Estado = Estado('DOING')
-
-        Accion_tablero: Accion_mock = Accion_mock()
-        Accion_tarea: Accion_mock = Accion_mock()
-        Accion_estado: Accion_mock = Accion_mock()
-
-        Primer_tarea: Tarea = Tarea('Tituloo', 'Descripcion larga', estado=TODO)
-
-        Proyecto: Tablero = Tablero('Proyecto')
-
-        Proyecto.agregar_estado(TODO)
-        Proyecto.agregar_estado(DOING)
-
-        SegundoProyecto: Tablero = Tablero('Segundo Proyecto')
-        Proyecto.agregar_tarea(Primer_tarea)
-
-        User.agregar_tablero(Proyecto)
-        User.agregar_tablero(SegundoProyecto)
-        User.subscribirse(Evento.CREACION_TARJETA, Proyecto, Accion_tablero)
-        User.subscribirse(Evento.CAMBIO_DE_ESTADO, Primer_tarea, Accion_tarea)
-        User.subscribirse(Evento.INGRESO_TARJETA, TODO, Accion_estado)
-
-        accion_transicion: Accion_mock = Accion_mock()
-
-        workflow: Workflow = Workflow()
-        Proyecto.workflow = workflow
-
-        workflow.agregar_accion_entre_estados(TODO, DOING, accion_transicion)
-        Proyecto.ejecutar_transicion(Primer_tarea, DOING)
-
-        User.save()
-
-        result = usuario_schema.dump(User)
-
-        return result, 200
+        return jsonify({'msg': 'Welcome to PRELLO API'}), 200
 
 class UsuarioResource(Resource):
-    def get(self):
-        usuario_actual = get_usuario_actual()
-        result = usuario_schema.dump(usuario_actual)
-        return result, 200
-
-
-class PrivatePrueba(Resource):
     @requires_auth
     def get(self):
         usuario_actual = get_usuario_actual()
@@ -88,4 +25,3 @@ class PrivatePrueba(Resource):
 
 api.add_resource(UsuarioResource, '/perfil', endpoint='usuarios_resource')
 api.add_resource(UsuarioPrueba, '/', endpoint='usuario_prueba')
-api.add_resource(PrivatePrueba, '/privado', endpoint='private_prueba')

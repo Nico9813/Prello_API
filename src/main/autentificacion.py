@@ -14,7 +14,53 @@ def get_usuario_actual():
     id_actual = _request_ctx_stack.top.current_user['sub']
     usuario_actual = Usuario.get_by_id(id_actual)
     if not usuario_actual:
+        from usuario.rol import Rol
+        from tarea.estado import Estado
+        from tarea.tarea import Tarea
+        from tablero.tablero import Tablero
+        from tablero.transicion_realizada import Transicion_realizada
+        from evento.observable import Observable
+        from evento.evento import Evento
+        from evento.accion import Accion_mock
+        from evento.subscripcion import Subscripcion
+        from workflow.workflow import Workflow
+        from workflow.transicion_posible import TransicionPosible
+
         usuario_actual = Usuario(id_actual)
+        usuario_actual.nombre = 'Rodrigo'
+        QA: Rol = Rol('QA')
+
+        TODO: Estado = Estado('TODO')
+        DOING: Estado = Estado('DOING')
+
+        Accion_tablero: Accion_mock = Accion_mock()
+        Accion_tarea: Accion_mock = Accion_mock()
+        Accion_estado: Accion_mock = Accion_mock()
+
+        Primer_tarea: Tarea = Tarea('Tituloo', 'Descripcion larga', estado=TODO)
+
+        Proyecto: Tablero = Tablero('Proyecto')
+
+        Proyecto.agregar_estado(TODO)
+        Proyecto.agregar_estado(DOING)
+
+        SegundoProyecto: Tablero = Tablero('Segundo Proyecto')
+        Proyecto.agregar_tarea(Primer_tarea)
+
+        usuario_actual.agregar_tablero(Proyecto)
+        usuario_actual.agregar_tablero(SegundoProyecto)
+        usuario_actual.subscribirse(Evento.CREACION_TARJETA, Proyecto, Accion_tablero)
+        usuario_actual.subscribirse(Evento.CAMBIO_DE_ESTADO, Primer_tarea, Accion_tarea)
+        usuario_actual.subscribirse(Evento.INGRESO_TARJETA, TODO, Accion_estado)
+
+        accion_transicion: Accion_mock = Accion_mock()
+
+        workflow: Workflow = Workflow()
+        Proyecto.workflow = workflow
+
+        workflow.agregar_accion_entre_estados(TODO, DOING, accion_transicion)
+        Proyecto.ejecutar_transicion(Primer_tarea, DOING)
+
         usuario_actual.save()
     return usuario_actual
 

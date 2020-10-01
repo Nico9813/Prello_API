@@ -22,6 +22,7 @@ api = Api(tablero_router)
 
 class TableroListResource(Resource):
 
+    @requires_auth
     def get(self):
         usuario_actual = get_usuario_actual()
         result = tablero_schema.dump(usuario_actual.tableros, many=True)
@@ -42,6 +43,7 @@ class TableroListResource(Resource):
 
 class TableroResource(Resource):
 
+    @requires_auth
     def get(self, tablero_id : int):
         tablero_actual = Tablero.get_by_id(tablero_id)
         result = tablero_schema.dump(tablero_actual)
