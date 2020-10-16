@@ -21,9 +21,10 @@ class Usuario(db.Model, BaseModel, Interesado):
     tableros = db.relationship(
         'Tablero', 
         secondary=usuarioXtablero, 
-        lazy='subquery',
+        lazy='joined',
         passive_deletes=True, 
-        cascade="all, delete"
+        cascade="all, delete",
+
     )
     roles = db.relationship('Rol', cascade="all, delete", lazy=True)
 

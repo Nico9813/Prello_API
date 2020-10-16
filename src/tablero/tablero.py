@@ -14,7 +14,7 @@ class Tablero(Observable):
     id = db.Column(db.Integer, primary_key=True)
     workflow_id = db.Column(db.Integer, db.ForeignKey('workflows.id'), nullable=True)
 
-    workflow: Workflow = db.relationship('Workflow', cascade="all, delete", lazy=True, foreign_keys=[workflow_id])
+    workflow = db.relationship('Workflow', cascade="all, delete", lazy=False, foreign_keys=[workflow_id])
     nombre = db.Column(db.String(80), nullable=True)
     tareas = db.relationship('Tarea', cascade="all, delete", lazy=True)
     transiciones = db.relationship('Transicion_realizada', cascade="all, delete",lazy=True)
@@ -36,6 +36,10 @@ class Tablero(Observable):
 
     def agregar_tarea(self, tarea : Tarea):
         self.tareas.append(tarea)
+
+    def crear_workflow(self):
+        self.workflow = Workflow()
+        
 
     def get_estados_posibles(self, estado : Estado):
         return self.workflow.get_estados_posibles(estado)

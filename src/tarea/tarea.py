@@ -13,6 +13,7 @@ class Tarea(Observable):
     estado = db.relationship('Estado', lazy=True)
     titulo = db.Column(db.String(50))
     descripcion = db.Column(db.String(150))
+    estados_posibles = []
     
     def __init__(self, titulo: str, descripcion: str, estado: Estado = None):
         self.estado = estado
@@ -25,3 +26,6 @@ class Tarea(Observable):
 
     def actualizar_estado(self, estado_nuevo : Estado):
         self.estado = estado_nuevo
+
+    def get_estados_posibles(self, workflow):
+        self.estados_posibles = workflow.get_estados_posibles(self.estado)

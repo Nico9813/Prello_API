@@ -55,11 +55,11 @@ def get_usuario_actual():
 
         accion_transicion: Accion_mock = Accion_mock()
 
-        workflow: Workflow = Workflow()
-        Proyecto.workflow = workflow
-
-        workflow.agregar_accion_entre_estados(TODO, DOING, accion_transicion)
+        Proyecto.crear_workflow()
+        Proyecto.workflow.agregar_accion_entre_estados(TODO, DOING, accion_transicion)
         Proyecto.ejecutar_transicion(Primer_tarea, DOING)
+
+        print(vars(Proyecto.workflow))
 
         usuario_actual.save()
     return usuario_actual

@@ -14,7 +14,7 @@ from .excepciones import ResourceNotFoundError, PermissionError, AuthError
 
 def create_app(settings_module):
     app = Flask(__name__)
-    cors = CORS(app)
+    CORS(app)
     app.config.from_object(settings_module)
 
     # Inicializa las extensiones

@@ -11,8 +11,8 @@ class TransicionPosible(db.Model, BaseModel):
     estado_inicial_id = db.Column(db.Integer, db.ForeignKey('estados.id'), nullable = False)
     estado_final_id = db.Column(db.Integer, db.ForeignKey('estados.id'), nullable = False)
 
-    estado_inicial: Estado = db.relationship('Estado', lazy = True, foreign_keys = [estado_inicial_id])
-    estado_final: Estado = db.relationship('Estado', lazy = True, foreign_keys = [estado_final_id])
+    estado_inicial: Estado = db.relationship('Estado',foreign_keys=[estado_inicial_id], lazy='joined')
+    estado_final: Estado = db.relationship('Estado', foreign_keys=[estado_final_id], lazy='joined')
     acciones: list = db.relationship('Accion', lazy = True)
 
     def __init__(self, estado_inicial: Estado, estado_final: Estado):

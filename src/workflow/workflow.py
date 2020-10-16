@@ -9,9 +9,9 @@ from tarea.tarea import Tarea
 
 class Workflow(db.Model, BaseModel):
     __tablename__ = 'workflows'
-    transiciones_posibles: list = db.relationship('TransicionPosible', cascade="all, delete",lazy=True)
-
     id = db.Column(db.Integer, primary_key=True)
+    
+    transiciones_posibles = db.relationship('TransicionPosible', cascade="all, delete", lazy='joined')
 
     def __init__(self):
         self.transiciones_posibles = []

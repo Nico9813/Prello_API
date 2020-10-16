@@ -34,6 +34,7 @@ class TareaListResource(Resource):
         result = tarea_schema.dump(tablero.tareas, many=True)
         return result, 200
 
+    @requires_auth
     def post(self, tablero_id: int):
         data = request.get_json()
         tarea_nueva_dicc = tarea_schema.load(data)
