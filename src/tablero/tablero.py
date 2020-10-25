@@ -40,7 +40,6 @@ class Tablero(Observable):
     def crear_workflow(self):
         self.workflow = Workflow()
         
-
     def get_estados_posibles(self, estado : Estado):
         return self.workflow.get_estados_posibles(estado)
 

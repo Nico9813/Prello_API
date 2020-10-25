@@ -31,8 +31,8 @@ class TransicionPosibleSchema(ma.Schema):
     acciones    = fields.Nested('AccionSchema', many=True, dump_only=True)
     estado_inicial = fields.Nested('EstadoSchema', many=False, dump_only=True)
     estado_final = fields.Nested('EstadoSchema', many=False, dump_only=True)
-    estado_inicial_id = fields.Integer(load_only=True)
-    estado_final_id = fields.Integer(load_only=True)
+    id_estado_inicial = fields.Integer(load_only=True)
+    id_estado_final = fields.Integer(load_only=True)
 
 class WorkflowSchema(ma.Schema):
     id          = fields.Integer(dump_only=True)
