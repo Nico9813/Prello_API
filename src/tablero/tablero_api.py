@@ -31,12 +31,12 @@ class TableroListResource(Resource):
     def post(self):
         data = request.get_json()
         tablero_nuevo_dicc = tablero_schema.load(data)
-        usuario_actual = get_usuario_actual()
+        #usuario_actual = get_usuario_actual()
 
         tablero_nuevo = Tablero(tablero_nuevo_dicc['nombre'])
 
-        usuario_actual.agregar_tablero(tablero_nuevo)
-        usuario_actual.save()
+        #usuario_actual.agregar_tablero(tablero_nuevo)
+        tablero_nuevo.save()
 
         result = tablero_schema.dump(tablero_nuevo)
         return result, 201
@@ -60,6 +60,22 @@ class TableroResource(Resource):
             tarea.delete()
 
         tablero_actual.delete()
+        return result, 200
+
+class TableroSharedResource(Resource):
+    @requires_auth
+    def post(self,encripted_tablero_id : int):
+        tablero_compartido = Tablero.get_by_id(encripted_tablero_id)
+
+        if tablero_compartido is None:
+            raise ResourceNotFoundError(
+                "El tablero " + str(encripted_tablero_id) + " no existe")
+
+        usuario_actual = get_usuario_actual()
+        usuario_actual.agregar_tablero(tablero_compartido)
+        usuario_actual.save()
+        
+        result = tablero_schema.dump(tablero_compartido)
         return result, 200
 
 transicion_realizada_schema = TransicionRealizadaSchema()
@@ -105,6 +121,14 @@ class TransicionesRealizadasResource(Resource):
 transicion_posible_schema = TransicionPosibleSchema()
 
 class TransicionesPosiblesResource(Resource):
+    def delete(self,tablero_id : int, transicion_id : int):
+        transicion_actual = TransicionPosible.get_by_id(transicion_id)
+        result = transicion_posible_schema.dump(transicion_actual)
+        transicion_actual.delete()
+        return result, 200
+        
+
+class TransicionesPosiblesListResource(Resource):
 
     def post(self, tablero_id : int):
         data = request.get_json()
@@ -146,6 +170,8 @@ class TransicionesPosiblesResource(Resource):
         return result, 200
 
 api.add_resource(TableroResource, '/tableros/<int:tablero_id>', endpoint='tableros_resource')
+api.add_resource(TableroSharedResource, '/tableros/shared/<int:encripted_tablero_id>', endpoint='tableros_shared_resource')
 api.add_resource(TransicionesRealizadasResource, '/tableros/<int:tablero_id>/transiciones', endpoint='transiciones_realizadas_resource')
-api.add_resource(TransicionesPosiblesResource, '/tableros/<int:tablero_id>/transiciones_posibles', endpoint='transiciones_posibles_resource')
+api.add_resource(TransicionesPosiblesListResource, '/tableros/<int:tablero_id>/transiciones_posibles', endpoint='transiciones_posibles_list_resource')
+api.add_resource(TransicionesPosiblesResource, '/tableros/<int:tablero_id>/transiciones_posibles/<int:transicion_id>', endpoint='transiciones_posibles_resource')
 api.add_resource(TableroListResource, '/tableros', endpoint='tableros_list_resource')

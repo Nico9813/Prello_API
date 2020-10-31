@@ -19,7 +19,6 @@ api = Api(usuario_router)
 class UsuarioPrueba(Resource):
     def get(self):
         workflow_prueba = TransicionPosible.get_by_id(4)
-        print(vars(workflow_prueba))
         return jsonify({'msg': "Welcome to PRELLO API"})
 
 class UsuarioResource(Resource):

@@ -59,8 +59,6 @@ def get_usuario_actual():
         Proyecto.workflow.agregar_accion_entre_estados(TODO, DOING, accion_transicion)
         Proyecto.ejecutar_transicion(Primer_tarea, DOING)
 
-        print(vars(Proyecto.workflow))
-
         usuario_actual.save()
     return usuario_actual
 
