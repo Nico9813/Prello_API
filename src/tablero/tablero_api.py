@@ -63,13 +63,31 @@ class TableroResource(Resource):
         return result, 200
 
 class TableroSharedResource(Resource):
+
     @requires_auth
-    def post(self,encripted_tablero_id : int):
-        tablero_compartido = Tablero.get_by_id(encripted_tablero_id)
+    def get(self, tablero_id : int):
+        tablero = Tablero.get_by_id(tablero_id)
+
+        if tablero is None:
+            raise ResourceNotFoundError(
+                "El tablero " + str(tablero_id) + " no existe")
+
+        usuario_actual = get_usuario_actual()
+        if not tablero.id in map(lambda tablero : tablero.id ,usuario_actual.tableros):
+            raise PermissionError(
+                "El tablero " + str(tablero_id) + " no pertenece al usuario actual"
+            )
+
+        return jsonify({"id": tablero_id})
+             
+
+    @requires_auth
+    def post(self,tablero_id : int):
+        tablero_compartido = Tablero.get_by_id(tablero_id)
 
         if tablero_compartido is None:
             raise ResourceNotFoundError(
-                "El tablero " + str(encripted_tablero_id) + " no existe")
+                "El tablero " + str(tablero_id) + " no existe")
 
         usuario_actual = get_usuario_actual()
         usuario_actual.agregar_tablero(tablero_compartido)
@@ -170,7 +188,7 @@ class TransicionesPosiblesListResource(Resource):
         return result, 200
 
 api.add_resource(TableroResource, '/tableros/<int:tablero_id>', endpoint='tableros_resource')
-api.add_resource(TableroSharedResource, '/tableros/shared/<int:encripted_tablero_id>', endpoint='tableros_shared_resource')
+api.add_resource(TableroSharedResource, '/tableros/shared/<int:tablero_id>', endpoint='tableros_shared_resource')
 api.add_resource(TransicionesRealizadasResource, '/tableros/<int:tablero_id>/transiciones', endpoint='transiciones_realizadas_resource')
 api.add_resource(TransicionesPosiblesListResource, '/tableros/<int:tablero_id>/transiciones_posibles', endpoint='transiciones_posibles_list_resource')
 api.add_resource(TransicionesPosiblesResource, '/tableros/<int:tablero_id>/transiciones_posibles/<int:transicion_id>', endpoint='transiciones_posibles_resource')
