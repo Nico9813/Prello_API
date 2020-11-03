@@ -49,6 +49,7 @@ class TareaResource(Resource):
     def get(self, tablero_id : int, tarea_id: int):
         tarea_actual = get_tarea_actual(tablero_id, tarea_id)
         result = tarea_schema.dump(tarea_actual)
+        print('get')
         return result, 200
 
     def delete(self, tablero_id : int, tarea_id : int):
@@ -64,8 +65,15 @@ class TareaResource(Resource):
         tarea_actual.delete()
         return result, 200
 
-    def update(self, tablero_id : int, tarea_id : int):
-        tarea_actual = get_tarea_actual(tablero_id, tarea_id)
+    def post(self, tablero_id : int, tarea_id : int):
+        data = request.get_json()
+        tarea = get_tarea_actual(tablero_id, tarea_id)
+
+        for key, value in data.items():
+            setattr(tarea, key, value)
+
+        tarea.save()
+        return data, 200
 
 api.add_resource(TareaResource, '/tableros/<int:tablero_id>/tareas/<int:tarea_id>/',
                  endpoint='tareas_resource')
