@@ -6,6 +6,7 @@ from tarea.tarea import Tarea
 from .transicion_realizada import Transicion_realizada
 from evento.evento import Evento
 from tarea.estado import Estado
+from usuario.rol import Rol
 from workflow.workflow import Workflow
 from workflow.transicion_posible import TransicionPosible
 
@@ -19,6 +20,7 @@ class Tablero(Observable):
     tareas = db.relationship('Tarea', cascade="all, delete", lazy=True)
     transiciones = db.relationship('Transicion_realizada', cascade="all, delete",lazy=True)
     estados = db.relationship('Estado', cascade="all, delete", lazy=True)
+    roles = db.relationship('Rol', cascade="all, delete", lazy=True)
 
     def __init__(self, nombre: str):
         self.nombre = nombre
@@ -26,6 +28,7 @@ class Tablero(Observable):
         self.tareas = []
         self.transiciones = []
         self.estados = []
+        self.roles = []
         self.workflow = Workflow()
     
     def __str__(self):
@@ -36,6 +39,9 @@ class Tablero(Observable):
 
     def agregar_tarea(self, tarea : Tarea):
         self.tareas.append(tarea)
+
+    def agregar_rol(self, rol : Rol):
+        self.roles.append(rol)
 
     def crear_workflow(self):
         self.workflow = Workflow()
@@ -55,6 +61,8 @@ class Tablero(Observable):
         transicion_realizada = self.workflow.ejecutar_transicion(tarea, estado_final)
 
         self.transiciones.append(transicion_historico)
+        
+        tarea.actualizar_estado(estado_final)
         
         return transicion_historico
         

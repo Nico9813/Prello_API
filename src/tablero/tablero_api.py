@@ -98,7 +98,7 @@ class TableroSharedResource(Resource):
 
 transicion_realizada_schema = TransicionRealizadaSchema()
 
-class TransicionesRealizadasResource(Resource):
+class TransicionesRealizadasListResource(Resource):
 
     def get(self, tablero_id : int):
         tablero_actual = Tablero.get_by_id(tablero_id)
@@ -127,14 +127,14 @@ class TransicionesRealizadasResource(Resource):
         try:
             transicion_realizada = tablero_actual.ejecutar_transicion(tarea_actual, estado_final)
             transicion_realizada.save()
+            tarea_actual.save()
             result = transicion_realizada_schema.dump(transicion_realizada)
             status_code = 201
         except TransicionNoValidaError as ex:
             result = jsonify("transicion no valida")
             status_code = 401
 
-        return result, status_code
-
+        return result
 
 transicion_posible_schema = TransicionPosibleSchema()
 
@@ -189,7 +189,7 @@ class TransicionesPosiblesListResource(Resource):
 
 api.add_resource(TableroResource, '/tableros/<int:tablero_id>', endpoint='tableros_resource')
 api.add_resource(TableroSharedResource, '/tableros/shared/<int:tablero_id>', endpoint='tableros_shared_resource')
-api.add_resource(TransicionesRealizadasResource, '/tableros/<int:tablero_id>/transiciones', endpoint='transiciones_realizadas_resource')
+api.add_resource(TransicionesRealizadasListResource, '/tableros/<int:tablero_id>/transiciones', endpoint='transiciones_realizadas_list_resource')
 api.add_resource(TransicionesPosiblesListResource, '/tableros/<int:tablero_id>/transiciones_posibles', endpoint='transiciones_posibles_list_resource')
 api.add_resource(TransicionesPosiblesResource, '/tableros/<int:tablero_id>/transiciones_posibles/<int:transicion_id>', endpoint='transiciones_posibles_resource')
 api.add_resource(TableroListResource, '/tableros', endpoint='tableros_list_resource')

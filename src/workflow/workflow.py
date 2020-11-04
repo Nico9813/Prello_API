@@ -45,11 +45,12 @@ class Workflow(db.Model, BaseModel):
     def ejecutar_transicion(self, tarea : Tarea, estado_final : Estado) -> list:
         transicion_a_ejecutar : TransicionPosible = self.obtener_transicion(tarea.estado, estado_final)
 
-        if transicion_a_ejecutar is None:
-            raise TransicionNoValidaError("La transicion no es valida")
+        #if transicion_a_ejecutar is None:
+            #raise TransicionNoValidaError("La transicion no es valida")
 
-        for accion in transicion_a_ejecutar.acciones:
-            accion.ejecutar()
+        if transicion_a_ejecutar is not None:
+            for accion in transicion_a_ejecutar.acciones:
+                accion.ejecutar()
 
         tarea.actualizar_estado(estado_final)
 

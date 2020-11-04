@@ -26,7 +26,6 @@ class Usuario(db.Model, BaseModel, Interesado):
         cascade="all, delete",
 
     )
-    roles = db.relationship('Rol', cascade="all, delete", lazy=True)
 
     def __str__(self):
         return "Nombre: " + self.nombre

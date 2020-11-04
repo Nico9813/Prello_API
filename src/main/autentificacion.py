@@ -29,6 +29,7 @@ def get_usuario_actual():
         usuario_actual = Usuario(id_actual)
         usuario_actual.nombre = 'Rodrigo'
         QA: Rol = Rol('QA')
+        DEVELOP: Rol = Rol('DEVELOP')
 
         TODO: Estado = Estado('TODO')
         DOING: Estado = Estado('DOING')
@@ -40,6 +41,8 @@ def get_usuario_actual():
         Primer_tarea: Tarea = Tarea('Tituloo', 'Descripcion larga', estado=TODO)
 
         Proyecto: Tablero = Tablero('Proyecto')
+        Proyecto.agregar_rol(QA)
+        Proyecto.agregar_rol(DEVELOP)
 
         Proyecto.agregar_estado(TODO)
         Proyecto.agregar_estado(DOING)
