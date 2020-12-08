@@ -10,6 +10,8 @@ from .estado import Estado
 from tablero.tablero import Tablero
 from tablero.transicion_realizada import Transicion_realizada
 
+import time
+
 from main.schemas import TareaSchema
 
 tarea_router = Blueprint('tarea', __name__)
@@ -66,6 +68,9 @@ class TareaResource(Resource):
         return result, 200
 
     def post(self, tablero_id : int, tarea_id : int):
+
+        inicio = int(round(time.time() * 1000))
+
         data = request.get_json()
         tarea = get_tarea_actual(tablero_id, tarea_id)
 
@@ -73,6 +78,8 @@ class TareaResource(Resource):
             setattr(tarea, key, value)
 
         tarea.save()
+        fin = int(round(time.time() * 1000))
+        print(str(fin - inicio) + 'ms')
         return data, 200
 
 api.add_resource(TareaResource, '/tableros/<int:tablero_id>/tareas/<int:tarea_id>/',

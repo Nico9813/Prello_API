@@ -21,7 +21,7 @@ def get_usuario_actual():
         from tablero.transicion_realizada import Transicion_realizada
         from evento.observable import Observable
         from evento.evento import Evento
-        from evento.accion import Accion_mock
+        from evento.accion import Accion_mock, WebHook
         from evento.subscripcion import Subscripcion
         from workflow.workflow import Workflow
         from workflow.transicion_posible import TransicionPosible
@@ -63,6 +63,10 @@ def get_usuario_actual():
         Proyecto.ejecutar_transicion(Primer_tarea, DOING)
 
         usuario_actual.save()
+    else:
+        from evento.evento import Evento
+        from evento.accion import Accion_mock, WebHook
+        primer_web_hook = WebHook(url='https://www.google.com.ar/', method='GET', body="", header="")
     return usuario_actual
 
 def get_token_auth_header():

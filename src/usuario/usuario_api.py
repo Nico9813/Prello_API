@@ -8,6 +8,7 @@ from main.schemas import UsuarioSchema, TransicionPosibleSchema, WorkflowSchema
 from workflow.workflow import Workflow
 from workflow.transicion_posible import TransicionPosible
 from tarea.estado import Estado
+import time
 
 usuario_router = Blueprint('usuario', __name__)
 
@@ -18,7 +19,6 @@ api = Api(usuario_router)
 
 class UsuarioPrueba(Resource):
     def get(self):
-        workflow_prueba = TransicionPosible.get_by_id(4)
         return jsonify({'msg': "Welcome to PRELLO API"})
 
 class UsuarioResource(Resource):

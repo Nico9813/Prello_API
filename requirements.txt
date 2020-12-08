@@ -13,4 +13,5 @@ flask_restful
 python-jose
 flask-cors
 six
+requests
 flask_cors

@@ -1,9 +1,11 @@
 from main.db import db, BaseModel
+import requests
 
 class AccionFactory():
     acciones_dicc = {
         'Accion_mock': lambda payload: Accion_mock(payload),
         'Accion_mock_2': lambda payload: Accion_mock_2(payload),
+        'WebHook': lambda payload: WebHook(payload)
     }
 
     @classmethod
@@ -25,7 +27,7 @@ class Accion(db.Model, BaseModel):
     subscripcion_id = db.Column(db.Integer, db.ForeignKey('subscripciones.id'), nullable=True)
     type = db.Column(db.String(50))
 
-    def ejecutar(self):
+    def ejecutar(self, **kwargs):
         pass
 
     __mapper_args__ = {
@@ -36,7 +38,7 @@ class Accion(db.Model, BaseModel):
 class Accion_mock(Accion):
     contador: int = db.Column(db.Integer, default=0)
 
-    def __init__(self, payload = {}):
+    def __init__(self, **kwargs):
         self.contador = 0
 
     def ejecutar(self):
@@ -50,7 +52,7 @@ class Accion_mock(Accion):
 class Accion_mock_2(Accion):
     contador_2: int = db.Column(db.Integer, default=0)
 
-    def __init__(self, payload={}):
+    def __init__(self, **kwargs):
         self.contador_2 = 0
 
     def ejecutar(self):
@@ -58,4 +60,34 @@ class Accion_mock_2(Accion):
 
     __mapper_args__ = {
         'polymorphic_identity': 'Accion_mock_2'
+    }
+
+class WebHook(Accion):
+    url : str = db.Column(db.String(50))
+    method : str = db.Column(db.String(1024))
+    headers : str = db.Column(db.String(1024))
+    body : str = db.Column(db.String(1024))
+    response : str = db.Column(db.Text)
+    status_code_response : int = db.Column(db.Integer)
+    
+    def __init__(self,**kwargs):
+        self.url = kwargs['url']
+        self.method = kwargs['method']
+        self.headers = kwargs['header']
+        self.body = kwargs['body']
+        self.response = None
+        self.status_code_response = None
+        self.ejecutar()
+
+    def ejecutar(self):
+        response = {
+            "GET": lambda : requests.get(self.url, headers=self.headers, data=self.body),
+            "POST": lambda : requests.post(self.url, headers=self.headers, data=self.body),
+        }[self.method]()
+        self.response = response.text
+        self.status_code_response = response.status_code
+        self.save()
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'WebHook'
     }
