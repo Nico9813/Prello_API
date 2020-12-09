@@ -37,6 +37,7 @@ def get_usuario_actual():
         Accion_tablero: Accion_mock = Accion_mock()
         Accion_tarea: Accion_mock = Accion_mock()
         Accion_estado: Accion_mock = Accion_mock()
+        primer_web_hook = WebHook(url='https://www.google.com.ar/', method='GET', body="", header="")
 
         Primer_tarea: Tarea = Tarea('Tituloo', 'Descripcion larga', estado=TODO)
 
@@ -60,11 +61,11 @@ def get_usuario_actual():
 
         Proyecto.crear_workflow()
         Proyecto.workflow.agregar_accion_entre_estados(TODO, DOING, accion_transicion)
+        Proyecto.workflow.agregar_accion_entre_estados(TODO, DOING, primer_web_hook)
         Proyecto.ejecutar_transicion(Primer_tarea, DOING)
 
         usuario_actual.save()
     else:
-        from evento.evento import Evento
         from evento.accion import Accion_mock, WebHook
         primer_web_hook = WebHook(url='https://www.google.com.ar/', method='GET', body="", header="")
     return usuario_actual

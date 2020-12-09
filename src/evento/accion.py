@@ -1,4 +1,5 @@
 from main.db import db, BaseModel
+import json
 import requests
 
 class AccionFactory():
@@ -26,6 +27,7 @@ class Accion(db.Model, BaseModel):
     transicion_id = db.Column(db.Integer, db.ForeignKey('transiciones_posibles.id'), nullable=True)
     subscripcion_id = db.Column(db.Integer, db.ForeignKey('subscripciones.id'), nullable=True)
     type = db.Column(db.String(50))
+    payload = db.Column(db.Text)
 
     def ejecutar(self, **kwargs):
         pass
@@ -77,6 +79,7 @@ class WebHook(Accion):
         self.body = kwargs['body']
         self.response = None
         self.status_code_response = None
+        self.payload = json.dumps(kwargs)
         self.ejecutar()
 
     def ejecutar(self):
