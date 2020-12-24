@@ -34,10 +34,10 @@ def get_usuario_actual():
         TODO: Estado = Estado('TODO')
         DOING: Estado = Estado('DOING')
 
-        Accion_tablero: Accion_mock = Accion_mock()
-        Accion_tarea: Accion_mock = Accion_mock()
-        Accion_estado: Accion_mock = Accion_mock()
-        primer_web_hook = WebHook(url='https://www.google.com.ar/', method='GET', body="", header="")
+        #Accion_tablero: Accion_mock = Accion_mock()
+        #Accion_tarea: Accion_mock = Accion_mock()
+        #Accion_estado: Accion_mock = Accion_mock()
+        #primer_web_hook = WebHook(url='https://www.google.com.ar/', method='GET', body="", header="")
 
         Primer_tarea: Tarea = Tarea('Tituloo', 'Descripcion larga', estado=TODO)
 
@@ -53,21 +53,21 @@ def get_usuario_actual():
 
         usuario_actual.agregar_tablero(Proyecto)
         usuario_actual.agregar_tablero(SegundoProyecto)
-        usuario_actual.subscribirse(Evento.CREACION_TARJETA, Proyecto, Accion_tablero)
-        usuario_actual.subscribirse(Evento.CAMBIO_DE_ESTADO, Primer_tarea, Accion_tarea)
-        usuario_actual.subscribirse(Evento.INGRESO_TARJETA, TODO, Accion_estado)
+        #usuario_actual.subscribirse(Evento.CREACION_TARJETA, Proyecto, Accion_tablero)
+        #usuario_actual.subscribirse(Evento.CAMBIO_DE_ESTADO, Primer_tarea, Accion_tarea)
+        #usuario_actual.subscribirse(Evento.INGRESO_TARJETA, TODO, Accion_estado)
 
-        accion_transicion: Accion_mock = Accion_mock()
+        #accion_transicion: Accion_mock = Accion_mock()
 
         Proyecto.crear_workflow()
-        Proyecto.workflow.agregar_accion_entre_estados(TODO, DOING, accion_transicion)
-        Proyecto.workflow.agregar_accion_entre_estados(TODO, DOING, primer_web_hook)
+        #Proyecto.workflow.agregar_accion_entre_estados(TODO, DOING, accion_transicion)
+        #Proyecto.workflow.agregar_accion_entre_estados(TODO, DOING, primer_web_hook)
         Proyecto.ejecutar_transicion(Primer_tarea, DOING)
 
         usuario_actual.save()
     else:
         from evento.accion import Accion_mock, WebHook
-        primer_web_hook = WebHook(url='https://www.google.com.ar/', method='GET', body="", header="")
+       #primer_web_hook = WebHook(url='https://www.google.com.ar/', method='GET', body="", header="")
     return usuario_actual
 
 def get_token_auth_header():

@@ -9,10 +9,10 @@ from main.excepciones import ResourceNotFoundError, PermissionError, TransicionN
 from .tablero import Tablero
 from tarea.tarea import Tarea
 from tarea.estado import Estado
-from evento.accion import AccionFactory
+from evento.accion import AccionFactory, Accion
 from workflow.transicion_posible import TransicionPosible
 from usuario.usuario import Usuario
-from main.schemas import TableroSchema, TransicionRealizadaSchema, TransicionPosibleSchema
+from main.schemas import TableroSchema, TransicionRealizadaSchema, TransicionPosibleSchema, AccionSchema
 
 tablero_router = Blueprint('tablero', __name__)
 
@@ -28,14 +28,15 @@ class TableroListResource(Resource):
         result = tablero_schema.dump(usuario_actual.tableros, many=True)
         return result, 200
     
+    @requires_auth
     def post(self):
         data = request.get_json()
         tablero_nuevo_dicc = tablero_schema.load(data)
-        #usuario_actual = get_usuario_actual()
+        usuario_actual = get_usuario_actual()
 
         tablero_nuevo = Tablero(tablero_nuevo_dicc['nombre'])
 
-        #usuario_actual.agregar_tablero(tablero_nuevo)
+        usuario_actual.agregar_tablero(tablero_nuevo)
         tablero_nuevo.save()
 
         result = tablero_schema.dump(tablero_nuevo)
@@ -167,14 +168,16 @@ class TransicionesPosiblesListResource(Resource):
         result = transicion_posible_schema.dump(transicion_posible_nueva)
         return result, 201
 
-    def put(self, tablero_id : int):
+accion_schema = AccionSchema()
+
+class AccionesTransicionResource(Resource):
+
+    def post(self, tablero_id : int, transicion_id : int):
         data = request.get_json()
-        id_estado_inicial = data['id_estado_inicial']
-        id_estado_final = data['id_estado_final']
-        accion = data['accion']
-        accion_a_agregar = AccionFactory.crear_instancia(accion['type'], accion['payload'])
-        estado_inicial = Estado.get_by_id(id_estado_inicial)
-        estado_final = Estado.get_by_id(id_estado_final)
+        transicion = TransicionPosible.get_by_id(transicion_id)
+        accion_a_agregar = AccionFactory.crear_instancia(data['type'], data['payload'])
+        estado_inicial = transicion.estado_inicial
+        estado_final = transicion.estado_final
         tablero_actual = Tablero.get_by_id(tablero_id)
 
         if estado_inicial is None:
@@ -184,12 +187,24 @@ class TransicionesPosiblesListResource(Resource):
 
         transicion_modificada = tablero_actual.workflow.agregar_accion_entre_estados(estado_inicial, estado_final, accion_a_agregar)
         transicion_modificada.save()
-        result = transicion_posible_schema.dump(transicion_modificada)
+        result = accion_schema.dump(accion_a_agregar)
         return result, 200
+
+class AccionTransicionResource(Resource):
+    def delete(self,tablero_id : int, transicion_id : int, accion_id :int):
+        accion_actual = Accion.get_by_id(accion_id)
+        result = accion_schema.dump(accion_actual)
+        accion_actual.delete()
+        return result, 200
+
+
+
 
 api.add_resource(TableroResource, '/tableros/<int:tablero_id>', endpoint='tableros_resource')
 api.add_resource(TableroSharedResource, '/tableros/shared/<int:tablero_id>', endpoint='tableros_shared_resource')
 api.add_resource(TransicionesRealizadasListResource, '/tableros/<int:tablero_id>/transiciones', endpoint='transiciones_realizadas_list_resource')
 api.add_resource(TransicionesPosiblesListResource, '/tableros/<int:tablero_id>/transiciones_posibles', endpoint='transiciones_posibles_list_resource')
 api.add_resource(TransicionesPosiblesResource, '/tableros/<int:tablero_id>/transiciones_posibles/<int:transicion_id>', endpoint='transiciones_posibles_resource')
+api.add_resource(AccionesTransicionResource, '/tableros/<int:tablero_id>/transiciones_posibles/<int:transicion_id>/acciones', endpoint='acciones_transiciones_posibles_resource')
+api.add_resource(AccionTransicionResource, '/tableros/<int:tablero_id>/transiciones_posibles/<int:transicion_id>/acciones/<int:accion_id>', endpoint='accion_transiciones_posibles_resource')
 api.add_resource(TableroListResource, '/tableros', endpoint='tableros_list_resource')

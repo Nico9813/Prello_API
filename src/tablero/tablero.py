@@ -16,7 +16,7 @@ class Tablero(Observable):
     workflow_id = db.Column(db.Integer, db.ForeignKey('workflows.id'), nullable=True)
 
     workflow = db.relationship('Workflow', cascade="all, delete", lazy=False, foreign_keys=[workflow_id])
-    nombre = db.Column(db.String(80), nullable=True)
+    nombre = db.Column(db.String(80), nullable=False)
     tareas = db.relationship('Tarea', cascade="all, delete", lazy=True)
     transiciones = db.relationship('Transicion_realizada', cascade="all, delete",lazy=True)
     estados = db.relationship('Estado', cascade="all, delete", lazy=True)

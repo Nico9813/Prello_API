@@ -72,7 +72,8 @@ class WebHook(Accion):
     response : str = db.Column(db.Text)
     status_code_response : int = db.Column(db.Integer)
     
-    def __init__(self,**kwargs):
+    def __init__(self,kwargs):
+        print(kwargs)
         self.url = kwargs['url']
         self.method = kwargs['method']
         self.headers = kwargs['header']
@@ -80,7 +81,6 @@ class WebHook(Accion):
         self.response = None
         self.status_code_response = None
         self.payload = json.dumps(kwargs)
-        self.ejecutar()
 
     def ejecutar(self):
         response = {
