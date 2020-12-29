@@ -15,3 +15,4 @@ flask-cors
 six
 requests
 flask_cors
+wheel
