@@ -16,3 +16,4 @@ six
 requests
 flask_cors
 wheel
+gunicorn
