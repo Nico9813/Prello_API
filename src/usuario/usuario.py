@@ -24,7 +24,6 @@ class Usuario(db.Model, BaseModel, Interesado):
         lazy='joined',
         passive_deletes=True, 
         cascade="all, delete",
-
     )
 
     def __str__(self):

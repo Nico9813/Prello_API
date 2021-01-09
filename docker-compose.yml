@@ -32,3 +32,10 @@ services:
     image: adminer
     ports:
       - "8080:8080"
+
+  redis:
+    image: bitnami/redis:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports: 
+      - "6379:6379"

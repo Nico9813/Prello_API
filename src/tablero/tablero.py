@@ -55,16 +55,14 @@ class Tablero(Observable):
     def agregar_transicion(self, estado_inicial : Estado, estado_final : Estado):
         return self.workflow.agregar_transicion(estado_inicial, estado_final)
 
-    def ejecutar_transicion(self, tarea: Tarea, estado_final: Estado):
-        transicion_historico : Transicion_realizada = Transicion_realizada(tarea, estado_final)
-        
+    def ejecutar_transicion(self, tarea: Tarea, estado_final: Estado):        
         transicion_realizada = self.workflow.ejecutar_transicion(tarea, estado_final)
 
-        self.transiciones.append(transicion_historico)
+        self.transiciones.append(transicion_realizada)
         
         tarea.actualizar_estado(estado_final)
         
-        return transicion_historico
+        return transicion_realizada
         
 
         

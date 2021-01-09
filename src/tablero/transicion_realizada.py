@@ -2,7 +2,8 @@ from main.db import db, BaseModel
 
 from tarea.estado import Estado
 from tarea.tarea import Tarea
-from workflow.workflow import Workflow
+from evento.accion import Accion
+from evento.resultado_accion import ResultadoAccion
 
 class Transicion_realizada(db.Model, BaseModel):
     __tablename__ = 'transiciones_realizadas'
@@ -16,8 +17,11 @@ class Transicion_realizada(db.Model, BaseModel):
     tarea = db.relationship('Tarea', lazy=True)
     estado_inicial = db.relationship('Estado', foreign_keys=[estado_inicial_id],lazy=True)
     estado_final = db.relationship('Estado', foreign_keys=[estado_final_id] ,lazy=True)
+    respuestas = db.relationship('ResultadoAccion', lazy = True)
 
-    def __init__(self, tarea: Tarea, estado_final: Estado):
+    def __init__(self, tarea: Tarea, estado_final: Estado, respuestas : list):
         self.tarea = tarea
         self.estado_inicial = tarea.estado
         self.estado_final = estado_final
+        print(respuestas)
+        self.respuestas = respuestas

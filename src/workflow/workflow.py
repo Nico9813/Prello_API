@@ -2,6 +2,7 @@ from main.db import db, BaseModel
 
 from main.excepciones import TransicionNoValidaError
 from .transicion_posible import TransicionPosible
+from tablero.transicion_realizada import Transicion_realizada
 from tarea.estado import Estado
 from evento.accion import Accion
 from pommons.list import find
@@ -42,16 +43,20 @@ class Workflow(db.Model, BaseModel):
         transicion_correcta = find(self.transiciones_posibles, lambda transicion: self.es_la_transicion(estado_inicial, estado_final, transicion))
         return transicion_correcta
 
-    def ejecutar_transicion(self, tarea : Tarea, estado_final : Estado) -> list:
+    def ejecutar_transicion(self, tarea : Tarea, estado_final : Estado) -> Transicion_realizada:
         transicion_a_ejecutar : TransicionPosible = self.obtener_transicion(tarea.estado, estado_final)
 
         #if transicion_a_ejecutar is None:
             #raise TransicionNoValidaError("La transicion no es valida")
 
+        respuestas = []
+
         if transicion_a_ejecutar is not None:
             for accion in transicion_a_ejecutar.acciones:
-                accion.ejecutar()
+                respuestas.append(accion.ejecutar())
 
         tarea.actualizar_estado(estado_final)
 
-        return transicion_a_ejecutar
+        transicion_ejecutada = Transicion_realizada(tarea, estado_final, respuestas)
+
+        return transicion_ejecutada

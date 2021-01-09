@@ -26,6 +26,11 @@ class TransicionRealizadaSchema(ma.Schema):
     estado_final = fields.Nested('EstadoSchema', many=False, dump_only=True)
     id_estado_final = fields.Integer(load_only=True)
     id_tarea        = fields.Integer(load_only=True)
+    respuestas = fields.Nested('RespuestaSchema', many=True, dump_only=True)
+
+class RespuestaSchema(ma.Schema):
+    id          = fields.Integer(dump_only=True)
+    respuesta   = fields.List(fields.String())
 
 class TransicionPosibleSchema(ma.Schema):
     id          = fields.Integer(dump_only=True)

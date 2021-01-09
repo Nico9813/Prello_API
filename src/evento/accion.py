@@ -45,6 +45,7 @@ class Accion_mock(Accion):
 
     def ejecutar(self):
         self.contador += 1
+        return json.dumps({"contador_actualizado":self.contador})
 
     __mapper_args__ = {
         'polymorphic_identity': 'Accion_mock'
@@ -59,6 +60,7 @@ class Accion_mock_2(Accion):
 
     def ejecutar(self):
         self.contador_2 += 1
+        return json.dumps({"contador_actualizado":self.contador_2})
 
     __mapper_args__ = {
         'polymorphic_identity': 'Accion_mock_2'
@@ -69,8 +71,6 @@ class WebHook(Accion):
     method : str = db.Column(db.String(1024))
     headers : str = db.Column(db.String(1024))
     body : str = db.Column(db.String(1024))
-    response : str = db.Column(db.Text)
-    status_code_response : int = db.Column(db.Integer)
     
     def __init__(self,kwargs):
         print(kwargs)
@@ -78,18 +78,15 @@ class WebHook(Accion):
         self.method = kwargs['method']
         self.headers = kwargs['header']
         self.body = kwargs['body']
-        self.response = None
-        self.status_code_response = None
         self.payload = json.dumps(kwargs)
 
     def ejecutar(self):
+        print(vars(self))
         response = {
-            "GET": lambda : requests.get(self.url, headers=self.headers, data=self.body),
+            "GET": lambda : requests.get(self.url),
             "POST": lambda : requests.post(self.url, headers=self.headers, data=self.body),
         }[self.method]()
-        self.response = response.text
-        self.status_code_response = response.status_code
-        self.save()
+        return json.dumps({"status_code_response":response.status_code, "response":response.text})
 
     __mapper_args__ = {
         'polymorphic_identity': 'WebHook'
